@@ -5,6 +5,22 @@ namespace Razor.Components.Services
 {
     public class FileAccessService
     {
+        public async Task<List<FileAccessRule>> GetAccessRulesFromDb()
+        {
+            return await _context.FileAccessRules.ToListAsync();
+        }
+
+        public async Task DeleteAccessRule(FileAccessRule rule)
+        {
+            var entry = await _context.FileAccessRules
+                .FirstOrDefaultAsync(r => r.FilePath == rule.FilePath && r.UserId == rule.UserId && r.Permission == rule.Permission);
+            if (entry != null)
+            {
+                _context.FileAccessRules.Remove(entry);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         private readonly ApplicationDbContext _context;
 
         public FileAccessService(ApplicationDbContext context)

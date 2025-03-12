@@ -1,20 +1,53 @@
 ﻿@page "/admin"
 @inject FileAccessService FileAccessService
-@using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject NavigationManager Navigation
 @rendermode InteractiveServer
 @attribute [Authorize]
 
-<input @bind="fileName" class="form-control" />
-<button @onclick="AddRule">Neue Regel</button>
-
 <h3>Admin</h3>
 
+<div class="row" style="gap:50px;">
+    <input style="width:80%;" @bind="fileName" class="form-control" />
+    <button style="width:15%;" class="btn btn-primary" @onclick="AddRule">Neue Regel</button>
+</div>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Dateiname</th>
+            <th>Benutzer-ID</th>
+            <th>Berechtigung</th>
+            <th>Aktion</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rule in accessRules)
+        {
+            <tr>
+                <td>@rule.FilePath</td>
+                <td>@rule.UserId</td>
+                <td>@rule.Permission</td>
+                <td>
+                    <button class="btn btn-danger" @onclick="() => DeleteRule(rule)">Löschen</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @code {
     string fileName = "";
+    List<FileAccessRule> accessRules = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAccessRules();
+    }
+    private async Task LoadAccessRules()
+    {
+        accessRules = await FileAccessService.GetAccessRulesFromDb();
+    }
 
     private async Task AddRule()
     {
@@ -27,6 +60,12 @@
         {
             await FileAccessService.AddAccessRule(fileName,userId,"All");
         }
+        await LoadAccessRules();
     }
-    
+
+    private async Task DeleteRule(FileAccessRule rule)
+    {
+        await FileAccessService.DeleteAccessRule(rule);
+        await LoadAccessRules();
+    }
 }

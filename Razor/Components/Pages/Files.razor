@@ -1,4 +1,7 @@
 ﻿@page "/files/{RequestedFile}"
+@using System.Security.Claims
+@inject FileAccessService FileAccessService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @attribute [Authorize]
 <h3>Files</h3>
 
@@ -17,20 +20,40 @@
 
 </h1>
 
+<h1>
+    HasPermission:
+
+    @accessMessage
+</h1>
+
 
 @code {
 
-    // 1. Angefragten Dateinnamen durch URL-Param 
-    // 2. Hat der Benutzer oder die Rolle zugriff? 
-    // -> DB Check SqlLite 
+    private string accessMessage = "";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await CheckPermission(); 
+    }
+
+    private async Task CheckPermission()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User.Identity;
+        var userId = authState.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        
+
+        if (user == null || !user.IsAuthenticated)
+        {
+            accessMessage = "User is not authenticated.";
+            return;
+        }
+        bool hasPermission = await FileAccessService.HasAccess(RequestedFile, userId, "All");
 
 
+        accessMessage = hasPermission ? "Zugriff" : "Kein Zugriff";
+    }
 
-    // Daten liegen in einem Netzwerkshare, wenn man die URL Kennt, dann hat man auch ohne Auth Zugriff
-    // Idee: Check isAuthenticated -> Kopiere die Datei temporär in diesen öffentlichen Ordner für den Share 
-
-    // Oder: Anfrage der datei z.B. /data/test.txt mit check isAuth? IIS-Share muss weg. 
-    // Ermöglicht rollen
 
     [Parameter]
     public string RequestedFile { get; set; }
