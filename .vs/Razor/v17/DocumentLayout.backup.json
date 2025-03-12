@@ -3,12 +3,52 @@
   "WorkspaceRootPath": "C:\\Users\\j.klaus\\Desktop\\Razor\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\components\\pages\\admin.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\admin.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\authenticationstateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\authenticationstateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\components\\pages\\todo.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\todo.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\components\\services\\fileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\services\\fileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\components\\pages\\files.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\files.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\components\\pages\\filelist.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\filelist.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\components\\models\\fileaccessrule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\models\\fileaccessrule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\components\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,19 +58,149 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Todo.razor",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Pages\\Todo.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\Pages\\Todo.razor",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Pages\\Todo.razor",
+              "RelativeToolTip": "Razor\\Components\\Pages\\Todo.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T10:49:00.77Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Admin.razor",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Pages\\Admin.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\Pages\\Admin.razor",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Pages\\Admin.razor",
+              "RelativeToolTip": "Razor\\Components\\Pages\\Admin.razor",
+              "ViewState": "AgIAAAQAAACgZWZmZmYkwBUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T10:42:58.714Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Home.razor",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Pages\\Home.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\Pages\\Home.razor",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Pages\\Home.razor",
+              "RelativeToolTip": "Razor\\Components\\Pages\\Home.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T10:46:45.366Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AuthenticationStateProvider.cs",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\AuthenticationStateProvider.cs",
+              "RelativeDocumentMoniker": "Razor\\AuthenticationStateProvider.cs",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\AuthenticationStateProvider.cs",
+              "RelativeToolTip": "Razor\\AuthenticationStateProvider.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T12:09:30.626Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Program.cs",
+              "RelativeDocumentMoniker": "Razor\\Program.cs",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Program.cs",
+              "RelativeToolTip": "Razor\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T10:41:19.771Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "FileService.cs",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Services\\FileService.cs",
+              "RelativeDocumentMoniker": "Razor\\Components\\Services\\FileService.cs",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Services\\FileService.cs",
+              "RelativeToolTip": "Razor\\Components\\Services\\FileService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T10:58:00.16Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "_Imports.razor",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\_Imports.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\_Imports.razor",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\_Imports.razor",
+              "RelativeToolTip": "Razor\\Components\\_Imports.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T09:33:56.319Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "App.razor",
               "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\App.razor",
               "RelativeDocumentMoniker": "Razor\\Components\\App.razor",
               "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\App.razor",
               "RelativeToolTip": "Razor\\Components\\App.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA7AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-03-12T09:38:54.352Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Files.razor",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Pages\\Files.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\Pages\\Files.razor",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Pages\\Files.razor",
+              "RelativeToolTip": "Razor\\Components\\Pages\\Files.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T10:08:34.143Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "FileList.razor",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Pages\\FileList.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\Pages\\FileList.razor",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Pages\\FileList.razor",
+              "RelativeToolTip": "Razor\\Components\\Pages\\FileList.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T10:44:08.281Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "FileAccessRule.cs",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Models\\FileAccessRule.cs",
+              "RelativeDocumentMoniker": "Razor\\Components\\Models\\FileAccessRule.cs",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Models\\FileAccessRule.cs",
+              "RelativeToolTip": "Razor\\Components\\Models\\FileAccessRule.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T10:27:02.646Z",
               "EditorCaption": ""
             },
             {
@@ -39,15 +209,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "_Imports.razor",
-              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\_Imports.razor",
-              "RelativeDocumentMoniker": "Razor\\Components\\_Imports.razor",
-              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\_Imports.razor",
-              "RelativeToolTip": "Razor\\Components\\_Imports.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-12T09:33:56.319Z",
+              "DocumentIndex": 10,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Razor\\Components\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Razor\\Components\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-12T10:30:17.53Z",
               "EditorCaption": ""
             }
           ]

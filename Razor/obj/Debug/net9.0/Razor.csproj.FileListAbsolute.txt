@@ -192,4 +192,5 @@ C:\Users\j.klaus\Desktop\Razor\Razor\obj\Debug\net9.0\refint\Razor.dll
 C:\Users\j.klaus\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.pdb
 C:\Users\j.klaus\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.genruntimeconfig.cache
 C:\Users\j.klaus\Desktop\Razor\Razor\obj\Debug\net9.0\ref\Razor.dll
+C:\Users\j.klaus\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.sourcelink.json
 C:\Users\j.klaus\Desktop\Razor\Razor\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

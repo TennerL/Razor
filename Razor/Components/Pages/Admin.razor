@@ -1,0 +1,32 @@
+﻿@page "/admin"
+@inject FileAccessService FileAccessService
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+@attribute [Authorize]
+
+<input @bind="fileName" class="form-control" />
+<button @onclick="AddRule">Neue Regel</button>
+
+<h3>Admin</h3>
+
+
+@code {
+    string fileName = "";
+
+    private async Task AddRule()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        var user = authState.User.Identity;
+        var userId = authState.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (user != null && user.IsAuthenticated)
+        {
+            await FileAccessService.AddAccessRule(fileName,userId,"All");
+        }
+    }
+    
+}

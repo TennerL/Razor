@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager Navigation
 
@@ -19,6 +20,7 @@ else
 }
 
 @code {
+
     private System.Security.Claims.ClaimsPrincipal user;
 
     protected override async Task OnInitializedAsync()

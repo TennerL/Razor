@@ -1,7 +1,39 @@
-﻿@page "/file"
+﻿@page "/files/{RequestedFile}"
 @attribute [Authorize]
 <h3>Files</h3>
 
+<h1>
+
+    File: 
+
+    @if (string.IsNullOrEmpty(RequestedFile))
+    {
+        @:none
+    }
+    else
+    {
+        @RequestedFile
+    }
+
+</h1>
+
+
 @code {
 
+    // 1. Angefragten Dateinnamen durch URL-Param 
+    // 2. Hat der Benutzer oder die Rolle zugriff? 
+    // -> DB Check SqlLite 
+
+
+
+    // Daten liegen in einem Netzwerkshare, wenn man die URL Kennt, dann hat man auch ohne Auth Zugriff
+    // Idee: Check isAuthenticated -> Kopiere die Datei temporär in diesen öffentlichen Ordner für den Share 
+
+    // Oder: Anfrage der datei z.B. /data/test.txt mit check isAuth? IIS-Share muss weg. 
+    // Ermöglicht rollen
+
+    [Parameter]
+    public string RequestedFile { get; set; }
+
 }
+
