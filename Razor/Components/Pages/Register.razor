@@ -1,0 +1,106 @@
+@page "/register"
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Identity
+@using System.ComponentModel.DataAnnotations
+@inject UserManager<IdentityUser> UserManager
+@inject NavigationManager Navigation
+
+<EditForm Model="Model"  OnSubmit="HandleValidSubmit" FormName="RegisterForm">
+   
+
+    <div>
+        <label>Username:
+        <InputText @bind-Value="Model!.Username" />
+        </label>
+    </div>
+
+    <div>
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-Value="Model!.Email" />
+    </div>
+
+    <div>
+        <label for="password">Password:</label>
+        <InputText id="password" type="password" @bind-Value="Model!.Password" />
+    </div>
+
+    <div>
+        <label for="confirmPassword">Confirm Password:</label>
+        <InputText id="confirmPassword" type="password" @bind-Value="Model!.ConfirmPassword" />
+    </div>
+
+    <button type="submit">Register</button>
+</EditForm>
+
+@if (errorMessages.Any())
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in errorMessages)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    [SupplyParameterFromForm]
+    private RegisterForm? Model { get; set; }
+    protected override void OnInitialized() => Model ??= new();
+
+    public class RegisterForm
+    {
+        public string? Username { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
+        public string? ConfirmPassword { get; set; }
+    }
+    
+    private List<string> errorMessages = new List<string>();
+    private async Task HandleValidSubmit()
+    {
+        errorMessages.Clear();  
+
+        if (Model.Password != Model.ConfirmPassword)
+        {
+            errorMessages.Add("Passwords do not match.");
+            return;
+        }
+        if (string.IsNullOrEmpty(Model.Username))
+        {
+            errorMessages.Add("No Username");
+            return;
+        }
+
+        var user = new IdentityUser
+        {
+            UserName = Model.Username,
+            Email = Model.Email
+        };
+
+        // Sicherstellen, dass das Passwort nicht null ist
+        if (string.IsNullOrEmpty(Model.Password))
+        {
+            errorMessages.Add("Password cannot be null or empty.");
+            return;
+        }
+
+        // Versuch, den Benutzer zu erstellen
+        var result = await UserManager.CreateAsync(user, Model.Password);
+
+        if (result.Succeeded)
+        {
+            // Erfolgreich registriert, weiter zur Login-Seite oder Dashboard
+            Navigation.NavigateTo("/login");
+        }
+        else
+        {
+            // Fehlerbehandlung: Anzeigen von Fehlermeldungen
+            foreach (var error in result.Errors)
+            {
+                errorMessages.Add(error.Description);  // Fehlermeldungen zur Liste hinzufügen
+            }
+        }
+    }
+}

@@ -1,0 +1,58 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\j.klaus\\Desktop\\Razor\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\j.klaus\\desktop\\razor\\razor\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "App.razor",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\App.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\App.razor",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\App.razor",
+              "RelativeToolTip": "Razor\\Components\\App.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T09:38:54.352Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "_Imports.razor",
+              "DocumentMoniker": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\_Imports.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\_Imports.razor",
+              "ToolTip": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Components\\_Imports.razor",
+              "RelativeToolTip": "Razor\\Components\\_Imports.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-12T09:33:56.319Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

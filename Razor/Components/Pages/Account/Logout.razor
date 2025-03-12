@@ -1,0 +1,15 @@
+﻿@page "/Account/logout"
+@inject SignInManager<IdentityUser> SignInManager
+@inject NavigationManager Navigation
+<h3>Logout</h3>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await SignInManager.SignOutAsync();
+
+        await Task.Delay(500);
+
+        Navigation.NavigateTo("/Account/login", true);
+    }
+}

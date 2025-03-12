@@ -1,0 +1,56 @@
+@page "/Account/login"
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject NavigationManager Navigation
+
+<EditForm Model="Model" OnValidSubmit="HandleValidSubmit" FormName="LoginForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="row">
+        <div>
+            <label for="username">Username:</label>
+            <InputText class="form-control" id="username" @bind-Value="Model.UserName" />
+        </div>
+
+        <div>
+            <label for="password">Password:</label>
+            <InputText type="password" class="form-control" id="password" @bind-Value="Model.Password" />
+        </div>
+    </div>
+
+    <button class="btn btn-primary" style="margin-top:10px;" type="submit">Login</button>
+
+</EditForm>
+
+@code {
+[SupplyParameterFromForm]
+private LoginModel? Model {get; set;}
+protected override void OnInitialized() => Model ??= new();
+
+public class LoginModel
+{
+    public string UserName { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+}
+
+    private async Task HandleValidSubmit()
+    {
+        if (string.IsNullOrEmpty(Model.UserName) || string.IsNullOrEmpty(Model.Password))
+        {
+            return;
+        }
+
+        var result = await SignInManager.PasswordSignInAsync(Model.UserName, Model.Password, isPersistent: false, lockoutOnFailure: false);
+
+        if (result.Succeeded)
+        {
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            Console.WriteLine("Login failed: " + result.ToString());
+        }
+    }
+}

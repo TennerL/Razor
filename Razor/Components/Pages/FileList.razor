@@ -1,0 +1,118 @@
+@page "/filelist"
+@inject FileService FileService
+@rendermode InteractiveServer
+@attribute [Authorize]
+
+<h3>Verzeichnis: </h3>
+
+@if (files == null)
+{
+        <p>Lade Dateien...</p>
+}
+else if (!files.Any())
+{
+        <p>Keine Dateien gefunden.</p>
+}
+else
+{
+
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Dateiname</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var (file, index) in PagedFiles.Select((file, index) => (file, index + 1)))
+            {
+                        <tr>
+                            <td>@((currentPage - 1) * itemsPerPage + index)</td>
+                            <td><a href="https://test.nihonsaba.net/files/@file" target="_blank"> @file </a></td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+
+        <div class="row" style="margin-bottom:50px">
+            <div class="col-sm-4" style="display:block ruby; gap:10px;">
+
+                <span>Anzeige #</span>
+
+                <select class="form-control" style="width:35px;" @onchange="HandleItemsPerPageChange">
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+
+                <button class="btn btn-primary" @onclick="PreviousPage" disabled="@(currentPage == 1)">
+                    Zurück
+                </button>
+
+                <span>Seite @currentPage von @totalPages</span>
+
+                <button class="btn btn-primary" @onclick="NextPage" disabled="@(currentPage == totalPages)">
+                    Weiter
+                </button>
+                </div>
+        </div>
+}
+
+@code {
+    private List<string> files = new();
+    private int currentPage = 1;
+    private int itemsPerPage = 25;
+    private int totalPages = 1;
+
+    private IEnumerable<string> PagedFiles => files
+        .Skip((currentPage - 1) * itemsPerPage)
+        .Take(itemsPerPage);
+
+    protected override void OnInitialized()
+    {
+        LoadFiles();
+    }
+
+    private void LoadFiles()
+    {
+        files = FileService.GetFiles();
+        UpdateTotalPages();
+        currentPage = 1;
+    }
+
+    private void HandleItemsPerPageChange(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int newItemsPerPage))
+        {
+            itemsPerPage = newItemsPerPage;
+            currentPage = 1;
+            UpdateTotalPages();
+        }
+    }
+
+    private void UpdateTotalPages()
+    {
+        totalPages = (int)Math.Ceiling((double)files.Count / itemsPerPage);
+
+        if (currentPage > totalPages && totalPages > 0)
+        {
+            currentPage = totalPages;
+        }
+    }
+
+    private void PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+        }
+    }
+
+    private void NextPage()
+    {
+        if (currentPage < totalPages)
+        {
+            currentPage++;
+        }
+    }
+}

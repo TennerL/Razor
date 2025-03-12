@@ -1,0 +1,30 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
+
+<h3>Home Page</h3>
+
+@if (user == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>Welcome, @user.Identity.Name!</p>
+    @if (!user.Identity.IsAuthenticated)
+    {
+        Navigation.NavigateTo("/Account/login");
+    }
+}
+
+@code {
+    private System.Security.Claims.ClaimsPrincipal user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        user = authState.User;
+
+    }
+}
