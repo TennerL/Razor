@@ -8,30 +8,29 @@
 @attribute [Authorize]
 
 <EditForm Model="Model"  OnSubmit="HandleValidSubmit" FormName="RegisterForm">
-   
-
+  
     <div>
         <label>Username:
-        <InputText @bind-Value="Model!.Username" />
+        <InputText class="form-control" @bind-Value="Model!.Username" />
         </label>
     </div>
 
     <div>
         <label for="email">Email:</label>
-        <InputText id="email" @bind-Value="Model!.Email" />
+        <InputText class="form-control" id="email" @bind-Value="Model!.Email" />
     </div>
 
     <div>
         <label for="password">Password:</label>
-        <InputText id="password" type="password" @bind-Value="Model!.Password" />
+        <InputText class="form-control" id="password" type="password" @bind-Value="Model!.Password" />
     </div>
 
     <div>
         <label for="confirmPassword">Confirm Password:</label>
-        <InputText id="confirmPassword" type="password" @bind-Value="Model!.ConfirmPassword" />
+        <InputText class="form-control" id="confirmPassword" type="password" @bind-Value="Model!.ConfirmPassword" />
     </div>
 
-    <button type="submit">Register</button>
+    <button class="btn btn-primary" type="submit">Register</button>
 </EditForm>
 
 @if (errorMessages.Any())

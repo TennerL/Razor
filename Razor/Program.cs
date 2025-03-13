@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components.Authorization;
 using Razor.Components.Services;
 using Microsoft.Extensions.FileProviders;
+using BlazorBootstrap;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))); 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
@@ -21,7 +23,7 @@ builder.Services.AddSingleton<FileCleanupService>();
 builder.Services.AddHostedService(sp => sp.GetRequiredService<FileCleanupService>());
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-
+builder.Services.AddBlazorBootstrap();
 
 var app = builder.Build();
 

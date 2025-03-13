@@ -1,9 +1,11 @@
 ﻿@page "/admin"
-@inject FileAccessService FileAccessService
 @using System.Security.Claims
+@using BlazorBootstrap;
+@inject FileAccessService FileAccessService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @rendermode InteractiveServer
 @attribute [Authorize]
+
 
 <h3>Admin</h3>
 
@@ -11,6 +13,22 @@
     <input style="width:80%;" @bind="fileName" class="form-control" />
     <button style="width:15%;" class="btn btn-primary" @onclick="AddRule">Neue Regel</button>
 </div>
+
+<hr />
+
+<div class="row">
+    <div class="col-4">
+        <Button Color="ButtonColor.Secondary" @onclick="OnShowModalClick"><span class="bi-people-fill" /> Nutzerverwaltung </Button>
+        <Button Color="ButtonColor.Secondary"><span class="bi-person-fill-gear" /> Rollenverwaltung</Button>
+    </div>
+</div>
+<hr />
+
+<Modal @ref="modal" Title="Nutzerverwaltung">
+    <BodyTemplate>
+        <Register />
+    </BodyTemplate>
+</Modal>
 
 <table class="table mt-3">
     <thead>
@@ -36,7 +54,29 @@
     </tbody>
 </table>
 
+
+
 @code {
+
+    private Modal modal = default!;
+
+
+    private async Task OnShowModalClick()
+    {
+        if (modal != null)
+        {
+            await modal.ShowAsync();
+        }
+    }
+    private async Task OnHideModalClick()
+    {
+        if (modal != null)
+        {
+            await modal.HideAsync();
+        }
+    }
+
+
     string fileName = "";
     List<FileAccessRule> accessRules = new();
 
@@ -68,4 +108,6 @@
         await FileAccessService.DeleteAccessRule(rule);
         await LoadAccessRules();
     }
+
+
 }
