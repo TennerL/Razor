@@ -4,6 +4,8 @@
 @using System.ComponentModel.DataAnnotations
 @inject UserManager<IdentityUser> UserManager
 @inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
 
 <EditForm Model="Model"  OnSubmit="HandleValidSubmit" FormName="RegisterForm">
    

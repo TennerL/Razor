@@ -1,6 +1,8 @@
 ﻿@page "/files/{RequestedFile}"
 @using System.Security.Claims
+@inject NavigationManager Navigation
 @inject FileAccessService FileAccessService
+@inject RequestFileService RequestFileService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @attribute [Authorize]
 <h3>Files</h3>
@@ -52,6 +54,12 @@
 
 
         accessMessage = hasPermission ? "Zugriff" : "Kein Zugriff";
+
+        if (hasPermission)
+        {
+            await RequestFileService.GetFile(RequestedFile);
+            Navigation.NavigateTo("/req/"+RequestedFile);
+        }
     }
 
 
