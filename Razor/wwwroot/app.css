@@ -58,3 +58,15 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+.custom-modal .modal-dialog {
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    transform: translate(0, 0);
+    cursor: grab; 
+}
+
+.custom-modal .modal-header {
+    cursor: move; 
+}

@@ -4,6 +4,7 @@
 @inject FileAccessService FileAccessService
 @inject RequestFileService RequestFileService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<IdentityUser> UserManager
 @attribute [Authorize]
 <h3>Files</h3>
 
@@ -30,7 +31,6 @@
 
 
 @code {
-
     private string accessMessage = "";
 
     protected override async Task OnParametersSetAsync()
@@ -43,15 +43,26 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User.Identity;
         var userId = authState.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        
 
         if (user == null || !user.IsAuthenticated)
         {
             accessMessage = "User is not authenticated.";
             return;
         }
-        bool hasPermission = await FileAccessService.HasAccess(RequestedFile, userId, "All");
 
+        bool isAdmin = false;
+        if (!string.IsNullOrEmpty(userId))
+        {
+            var identityUser = await UserManager.FindByIdAsync(userId);
+            if (identityUser != null)
+            {
+                isAdmin = await UserManager.IsInRoleAsync(identityUser, "Admin");
+            }
+        }
+        
+
+
+        bool hasPermission = await FileAccessService.HasAccess(RequestedFile, userId, "All");
 
         accessMessage = hasPermission ? "Zugriff" : "Kein Zugriff";
 
@@ -59,6 +70,10 @@
         {
             await RequestFileService.GetFile(RequestedFile);
             Navigation.NavigateTo("/req/"+RequestedFile);
+        } else if (isAdmin)
+        {
+            await RequestFileService.GetFile(RequestedFile);
+            Navigation.NavigateTo("/req/" + RequestedFile);
         }
     }
 

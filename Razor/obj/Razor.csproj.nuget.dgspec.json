@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Razor.csproj": {}
+    "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Razor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Razor.csproj": {
+    "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Razor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Razor.csproj",
+        "projectUniqueName": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Razor.csproj",
         "projectName": "Razor",
-        "projectPath": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\Razor.csproj",
-        "packagesPath": "C:\\Users\\j.klaus\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\j.klaus\\Desktop\\Razor\\Razor\\obj\\",
+        "projectPath": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Razor.csproj",
+        "packagesPath": "C:\\Users\\Tenno\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\j.klaus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Tenno\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

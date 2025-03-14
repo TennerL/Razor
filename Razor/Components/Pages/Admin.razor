@@ -3,16 +3,14 @@
 @using BlazorBootstrap;
 @inject FileAccessService FileAccessService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManagementService UserManagementService
 @rendermode InteractiveServer
 @attribute [Authorize]
 
 
-<h3>Admin</h3>
+<h2>Admin</h2>
 
-<div class="row" style="gap:50px;">
-    <input style="width:80%;" @bind="fileName" class="form-control" />
-    <button style="width:15%;" class="btn btn-primary" @onclick="AddRule">Neue Regel</button>
-</div>
+
 
 <hr />
 
@@ -29,6 +27,60 @@
         <Register />
     </BodyTemplate>
 </Modal>
+
+<h3>Nutzerliste</h3>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Benutzer-ID</th>
+            <th>Benutzername</th>
+            <th>E-Mail</th>
+            <th>Rollen</th>
+            <th>Aktion</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (users != null)
+        {
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <select class="form-select" @onchange="async (e) => await ChangeUserRole(user, e.Value?.ToString())">
+                            @foreach (var role in availableRoles)
+                            {
+                                @if (role == user.Role)
+                                {
+                                    <option value="@role" selected>@role</option>
+                                }
+                                else
+                                {
+                                    <option value="@role">@role</option>
+                                }
+                            }
+                        </select>
+                    </td>
+
+
+                    <td>
+                        <Button Class="btn btn-danger" @onclick="() => DeleteUser(user)">Löschen</Button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<h3>Zugriffsregeln</h3>
+
+<div class="row" style="gap:50px;">
+    <input style="width:80%;" @bind="fileName" class="form-control" />
+    <button style="width:15%;" class="btn btn-primary" @onclick="AddRule">Neue Regel</button>
+</div>
 
 <table class="table mt-3">
     <thead>
@@ -60,7 +112,6 @@
 
     private Modal modal = default!;
 
-
     private async Task OnShowModalClick()
     {
         if (modal != null)
@@ -76,18 +127,30 @@
         }
     }
 
-
     string fileName = "";
+    List<string> availableRoles = new();
     List<FileAccessRule> accessRules = new();
+    List<UserDto> users = new();
 
     protected override async Task OnInitializedAsync()
     {
         await LoadAccessRules();
+        await LoadUsers();
+        await LoadRoles();
     }
     private async Task LoadAccessRules()
     {
         accessRules = await FileAccessService.GetAccessRulesFromDb();
     }
+    private async Task LoadUsers()
+    {
+        users = await UserManagementService.GetUsers();
+    }
+    private async Task LoadRoles()
+    {
+        availableRoles = await UserManagementService.GetRoles();
+    }
+
 
     private async Task AddRule()
     {
@@ -109,5 +172,35 @@
         await LoadAccessRules();
     }
 
+private async Task ChangeUserRole(UserDto user, string newRole)
+{
+    Console.WriteLine($"Ändere Rolle für Benutzer: {user.UserName} zu {newRole}");
+    
+    var updateModel = new UpdateRoleModel
+    {
+        UserId = user.Id,
+        NewRole = newRole
+    };
+
+    var result = await UserManagementService.UpdateUserRoleAsync(updateModel);
+    if (result)
+    {
+        await LoadUsers();
+    }
+    else
+    {
+        Console.WriteLine("Fehler beim Ändern der Rolle");
+    }
+}
+
+
+
+    private async Task DeleteUser(UserDto user)
+    {
+        await UserManagementService.DeleteUserAsync(user.Id);
+        await LoadUsers();
+    }
 
 }
+
+
