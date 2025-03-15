@@ -3,68 +3,52 @@
   "WorkspaceRootPath": "C:\\Users\\Tenno\\Desktop\\Razor\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\pages\\files.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\files.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\pages\\filelist.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\filelist.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\services\\usermanagementservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\services\\usermanagementservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\pages\\files.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\files.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\pages\\admin.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\admin.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\services\\fileaccessservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\services\\fileaccessservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\models\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\models\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\services\\requestfileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\services\\requestfileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\models\\fileaccessrule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\models\\fileaccessrule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\pages\\account\\rolemanager.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\account\\rolemanager.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\pages\\account\\register.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\account\\register.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\services\\fileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\services\\fileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\pages\\account\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\account\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\models\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\models\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\layout\\mainlayout.razor.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\layout\\mainlayout.razor.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\razor.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\razor.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\wwwroot\\app.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\wwwroot\\app.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\pages\\counter.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\pages\\counter.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|c:\\users\\tenno\\desktop\\razor\\razor\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{34A18FD9-261E-48C9-A222-3836D02DC017}|Razor\\Razor.csproj|solutionrelative:razor\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -74,36 +58,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UserDto.cs",
-              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Models\\UserDto.cs",
-              "RelativeDocumentMoniker": "Razor\\Components\\Models\\UserDto.cs",
-              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Models\\UserDto.cs",
-              "RelativeToolTip": "Razor\\Components\\Models\\UserDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-13T15:16:56.004Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "FIleAccessService.cs",
-              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Services\\FIleAccessService.cs",
-              "RelativeDocumentMoniker": "Razor\\Components\\Services\\FIleAccessService.cs",
-              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Services\\FIleAccessService.cs",
-              "RelativeToolTip": "Razor\\Components\\Services\\FIleAccessService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-13T15:12:57.517Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 2,
@@ -112,23 +68,23 @@
               "RelativeDocumentMoniker": "Razor\\Components\\Pages\\Admin.razor",
               "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Admin.razor",
               "RelativeToolTip": "Razor\\Components\\Pages\\Admin.razor",
-              "ViewState": "AgIAACcAAAAAAAAAAAAAAD8AAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-13T12:46:25.728Z",
+              "WhenOpened": "2025-03-14T14:21:49.069Z",
               "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Files.razor",
-              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Files.razor",
-              "RelativeDocumentMoniker": "Razor\\Components\\Pages\\Files.razor",
-              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Files.razor",
-              "RelativeToolTip": "Razor\\Components\\Pages\\Files.razor",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Title": "FileList.razor",
+              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\FileList.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\Pages\\FileList.razor",
+              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\FileList.razor",
+              "RelativeToolTip": "Razor\\Components\\Pages\\FileList.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-14T12:00:07.897Z",
+              "WhenOpened": "2025-03-14T13:36:24.204Z",
               "IsPinned": true,
               "EditorCaption": ""
             },
@@ -139,45 +95,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "UserManagementService.cs",
-              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Services\\UserManagementService.cs",
-              "RelativeDocumentMoniker": "Razor\\Components\\Services\\UserManagementService.cs",
-              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Services\\UserManagementService.cs",
-              "RelativeToolTip": "Razor\\Components\\Services\\UserManagementService.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAowFMAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-13T15:14:25.708Z",
+              "Title": "Files.razor",
+              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Files.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\Pages\\Files.razor",
+              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Files.razor",
+              "RelativeToolTip": "Razor\\Components\\Pages\\Files.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEsAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-15T15:59:04.709Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Program.cs",
-              "RelativeDocumentMoniker": "Razor\\Program.cs",
-              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Program.cs",
-              "RelativeToolTip": "Razor\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAA0AAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "RequestFileService.cs",
+              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Services\\RequestFileService.cs",
+              "RelativeDocumentMoniker": "Razor\\Components\\Services\\RequestFileService.cs",
+              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Services\\RequestFileService.cs",
+              "RelativeToolTip": "Razor\\Components\\Services\\RequestFileService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-13T18:00:25.035Z",
+              "WhenOpened": "2025-03-15T15:36:35.346Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ApplicationDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Data\\ApplicationDbContext.cs",
-              "RelativeDocumentMoniker": "Razor\\Components\\Data\\ApplicationDbContext.cs",
-              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Data\\ApplicationDbContext.cs",
-              "RelativeToolTip": "Razor\\Components\\Data\\ApplicationDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-13T17:31:14.576Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "FileAccessRule.cs",
               "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Models\\FileAccessRule.cs",
               "RelativeDocumentMoniker": "Razor\\Components\\Models\\FileAccessRule.cs",
@@ -185,112 +128,95 @@
               "RelativeToolTip": "Razor\\Components\\Models\\FileAccessRule.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-13T15:17:05.889Z",
+              "WhenOpened": "2025-03-15T15:36:28.426Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "RoleManager.razor",
-              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Account\\RoleManager.razor",
-              "RelativeDocumentMoniker": "Razor\\Components\\Pages\\Account\\RoleManager.razor",
-              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Account\\RoleManager.razor",
-              "RelativeToolTip": "Razor\\Components\\Pages\\Account\\RoleManager.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-13T15:11:59.532Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "Razor",
-              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Razor.csproj",
-              "RelativeDocumentMoniker": "Razor\\Razor.csproj",
-              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Razor.csproj",
-              "RelativeToolTip": "Razor\\Razor.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-03-13T14:58:02.822Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 6,
               "Title": "Register.razor",
               "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Account\\Register.razor",
               "RelativeDocumentMoniker": "Razor\\Components\\Pages\\Account\\Register.razor",
               "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Account\\Register.razor",
               "RelativeToolTip": "Razor\\Components\\Pages\\Account\\Register.razor",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-13T12:46:46.815Z",
+              "WhenOpened": "2025-03-15T15:36:51.811Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "App.razor",
-              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\App.razor",
-              "RelativeDocumentMoniker": "Razor\\Components\\App.razor",
-              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\App.razor",
-              "RelativeToolTip": "Razor\\Components\\App.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAABJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-13T13:28:24.287Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "app.css",
-              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\wwwroot\\app.css",
-              "RelativeDocumentMoniker": "Razor\\wwwroot\\app.css",
-              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\wwwroot\\app.css",
-              "RelativeToolTip": "Razor\\wwwroot\\app.css",
-              "ViewState": "AgIAACQAAAAAAAAAAAAAAEIAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-03-13T13:21:21.778Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "Counter.razor",
-              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Counter.razor",
-              "RelativeDocumentMoniker": "Razor\\Components\\Pages\\Counter.razor",
-              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Counter.razor",
-              "RelativeToolTip": "Razor\\Components\\Pages\\Counter.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-13T12:46:11.353Z",
-              "EditorCaption": ""
+              "DocumentIndex": 9,
+              "Title": "UserDto.cs",
+              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Models\\UserDto.cs",
+              "RelativeDocumentMoniker": "Razor\\Components\\Models\\UserDto.cs",
+              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Models\\UserDto.cs",
+              "RelativeToolTip": "Razor\\Components\\Models\\UserDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-15T15:36:24.459Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 11,
+              "Title": "MainLayout.razor",
+              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Layout\\MainLayout.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\Layout\\MainLayout.razor",
+              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Layout\\MainLayout.razor",
+              "RelativeToolTip": "Razor\\Components\\Layout\\MainLayout.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-14T14:04:43.763Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "MainLayout.razor.css",
               "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Layout\\MainLayout.razor.css",
               "RelativeDocumentMoniker": "Razor\\Components\\Layout\\MainLayout.razor.css",
               "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Layout\\MainLayout.razor.css",
               "RelativeToolTip": "Razor\\Components\\Layout\\MainLayout.razor.css",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAAAGEAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-03-13T13:18:57.012Z",
+              "WhenOpened": "2025-03-14T14:04:24.474Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "App.razor",
+              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\App.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\App.razor",
+              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\App.razor",
+              "RelativeToolTip": "Razor\\Components\\App.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-14T14:02:47.312Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "_Imports.razor",
-              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\_Imports.razor",
-              "RelativeDocumentMoniker": "Razor\\Components\\_Imports.razor",
-              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\_Imports.razor",
-              "RelativeToolTip": "Razor\\Components\\_Imports.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-13T12:50:14.284Z",
+              "DocumentIndex": 7,
+              "Title": "FileService.cs",
+              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Services\\FileService.cs",
+              "RelativeDocumentMoniker": "Razor\\Components\\Services\\FileService.cs",
+              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Services\\FileService.cs",
+              "RelativeToolTip": "Razor\\Components\\Services\\FileService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-14T13:28:15.347Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Login.razor",
+              "DocumentMoniker": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Account\\Login.razor",
+              "RelativeDocumentMoniker": "Razor\\Components\\Pages\\Account\\Login.razor",
+              "ToolTip": "C:\\Users\\Tenno\\Desktop\\Razor\\Razor\\Components\\Pages\\Account\\Login.razor",
+              "RelativeToolTip": "Razor\\Components\\Pages\\Account\\Login.razor",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-15T15:36:43.555Z"
             }
           ]
         }

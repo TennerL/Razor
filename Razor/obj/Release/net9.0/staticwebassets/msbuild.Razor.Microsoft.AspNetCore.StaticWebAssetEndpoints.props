@@ -25236,17 +25236,17 @@
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"u9q1upor1n"},{"Name":"integrity","Value":"sha256-vqK8KwEVuWidx0Ddm5m5LyBriPDPl9TcjrKZQhkFSVA="},{"Name":"label","Value":"_content/Razor/lib/bootstrap/dist/js/bootstrap.js"}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"149895"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022vqK8KwEVuWidx0Ddm5m5LyBriPDPl9TcjrKZQhkFSVA=\u0022"},{"Name":"Last-Modified","Value":"Thu, 13 Mar 2025 12:26:26 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/Razor/Razor.0ayxdzjoaq.bundle.scp.css">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Razor.0ayxdzjoaq.bundle.scp.css'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"0ayxdzjoaq"},{"Name":"integrity","Value":"sha256-yPTvPty\u002BMURCemrh2ySxgAJYWGkWmLF39WlhocrJRac="},{"Name":"label","Value":"_content/Razor/Razor.bundle.scp.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"6484"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022yPTvPty\u002BMURCemrh2ySxgAJYWGkWmLF39WlhocrJRac=\u0022"},{"Name":"Last-Modified","Value":"Thu, 13 Mar 2025 12:26:24 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/Razor/Razor.bundle.scp.css">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Razor.0ayxdzjoaq.bundle.scp.css'))</AssetFile>
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Razor.yxkputhkqq.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-yPTvPty\u002BMURCemrh2ySxgAJYWGkWmLF39WlhocrJRac="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"6484"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022yPTvPty\u002BMURCemrh2ySxgAJYWGkWmLF39WlhocrJRac=\u0022"},{"Name":"Last-Modified","Value":"Thu, 13 Mar 2025 12:26:24 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-RrgWxtGCbOoobJS\u002BH7Ey/JP6LTnME5XYvmssExbIMTU="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"6452"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022RrgWxtGCbOoobJS\u002BH7Ey/JP6LTnME5XYvmssExbIMTU=\u0022"},{"Name":"Last-Modified","Value":"Fri, 14 Mar 2025 14:07:28 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/Razor/Razor.yxkputhkqq.bundle.scp.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Razor.yxkputhkqq.bundle.scp.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"yxkputhkqq"},{"Name":"integrity","Value":"sha256-RrgWxtGCbOoobJS\u002BH7Ey/JP6LTnME5XYvmssExbIMTU="},{"Name":"label","Value":"_content/Razor/Razor.bundle.scp.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"6452"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022RrgWxtGCbOoobJS\u002BH7Ey/JP6LTnME5XYvmssExbIMTU=\u0022"},{"Name":"Last-Modified","Value":"Fri, 14 Mar 2025 14:07:28 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
   </ItemGroup>
 </Project>

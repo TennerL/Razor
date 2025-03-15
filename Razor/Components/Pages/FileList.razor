@@ -5,71 +5,102 @@
 
 <h3>Verzeichnis: </h3>
 
-@if (files == null)
+@if (files == null && folders == null)
 {
-        <p>Lade Dateien...</p>
+    <p>Lade Dateien...</p>
 }
-else if (!files.Any())
+else if (!files.Any() && !folders.Any())
 {
-        <p>Keine Dateien gefunden.</p>
+    <p>Keine Dateien gefunden.</p>
 }
 else
 {
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <button class="btn btn-link" @onclick="() => OnInitialized()"><span class="bi-house-fill"></span></button>
+            @foreach(var breadcrump in breadcrumpParts)
+            {
+                @* <li class="breadcrumb-item" href="#">@breadcrump</li> *@
+                <button class="btn btn-link" @onclick="() => GoToFolder(breadcrump)">@breadcrump</button>
+            }
+        </ol>
+    </nav>
 
 
-        <table class="table table-striped">
-            <thead>
+    <input class="form-control" placeholder="Suche" @bind="searchTerm" @oninput="OnSearchChanged" />
+
+    <table class="table table-striped" style="margin-top:10px;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Dateiname</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (folder, index) in PagedFolders.Select((folder, index) => (folder, index + 1)))
+            {
                 <tr>
-                    <th>#</th>
-                    <th>Dateiname</th>
+                    <td>@((currentPage - 1) * itemsPerPage + index)</td>
+                    <td><button class="btn btn-link" @onclick="() => GoToFolder(folder)">@folder</button></td>
                 </tr>
-            </thead>
-            <tbody>
+            }
             @foreach (var (file, index) in PagedFiles.Select((file, index) => (file, index + 1)))
             {
-                        <tr>
-                            <td>@((currentPage - 1) * itemsPerPage + index)</td>
-                            <td><a href="https://test.nihonsaba.net/files/@file"> @file </a></td>
-                        </tr>
+                <tr>
+                    <td>@((currentPage - 1) * itemsPerPage + index)</td>
+                    <td><a href="https://test.nihonsaba.net/files/@string.Concat(currentPath.Replace(@"\","&"),file)">@file</a></td>
+                </tr>
             }
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-        <div class="row" style="margin-bottom:50px">
-            <div class="col-sm-4" style="display:block ruby; gap:10px;">
+    <div class="row" style="margin-bottom:50px">
+        <div class="col-sm-4" style="display:block ruby; gap:10px;">
 
-                <span>Anzeige #</span>
+            <span>Anzeige #</span>
 
-                <select class="form-control" style="width:35px;" @onchange="HandleItemsPerPageChange">
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                </select>
+            <select class="form-control" style="width:50px;" @onchange="HandleItemsPerPageChange">
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
 
-                <button class="btn btn-primary" @onclick="PreviousPage" disabled="@(currentPage == 1)">
-                    Zurück
-                </button>
+            <button class="btn btn-primary" @onclick="PreviousPage" disabled="@(currentPage == 1)">
+                Zurück
+            </button>
 
-                <span>Seite @currentPage von @totalPages</span>
+            <span>Seite @currentPage von @totalPages</span>
 
-                <button class="btn btn-primary" @onclick="NextPage" disabled="@(currentPage == totalPages)">
-                    Weiter
-                </button>
-                </div>
+            <button class="btn btn-primary" @onclick="NextPage" disabled="@(currentPage == totalPages)">
+                Weiter
+            </button>
         </div>
+    </div>
 }
 
 @code {
     private List<string> files = new();
+    private List<string> folders = new();
     private int currentPage = 1;
     private int itemsPerPage = 25;
     private int totalPages = 1;
+    private string currentPath = "";
+    private List<string> breadcrumpParts = new();
+    private string searchTerm = "";
 
     private IEnumerable<string> PagedFiles => files
+        .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+        .Skip((currentPage - 1) * itemsPerPage)
+        .Take(itemsPerPage);
+
+    private IEnumerable<string> PagedFolders => folders
+        .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
         .Skip((currentPage - 1) * itemsPerPage)
         .Take(itemsPerPage);
 
     protected override void OnInitialized()
     {
+        breadcrumpParts.Clear();
+        LoadFolders();
         LoadFiles();
     }
 
@@ -79,6 +110,26 @@ else
         UpdateTotalPages();
         currentPage = 1;
     }
+    private void LoadFolders()
+    {
+        folders = FileService.GetFolders();
+        UpdateTotalPages();
+        currentPage = 1;
+    }
+    private void GoToFolder(string folder)
+    {
+        breadcrumpParts.Clear();
+        currentPath += folder + @"\";
+        breadcrumpParts.Add(currentPath);
+
+        folders = FileService.FetchFoldersFromFolder(currentPath);
+        files = FileService.FetchFilesFromFolder(currentPath);
+
+        UpdateTotalPages();
+        currentPage = 1;
+    }
+
+
 
     private void HandleItemsPerPageChange(ChangeEventArgs e)
     {
@@ -114,5 +165,11 @@ else
         {
             currentPage++;
         }
+    }
+    
+    private void OnSearchChanged(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? "";
+        currentPage = 1;
     }
 }

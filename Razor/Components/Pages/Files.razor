@@ -59,21 +59,31 @@
                 isAdmin = await UserManager.IsInRoleAsync(identityUser, "Admin");
             }
         }
-        
+
 
 
         bool hasPermission = await FileAccessService.HasAccess(RequestedFile, userId, "All");
 
         accessMessage = hasPermission ? "Zugriff" : "Kein Zugriff";
 
+        var reqFile = "";
+        int lastIndex = RequestedFile.LastIndexOf("&");
+        if (lastIndex != -1)
+        {
+            reqFile = RequestedFile.Substring(lastIndex + 1);
+        } else
+        {
+            reqFile = RequestedFile;
+        }
+
         if (hasPermission)
         {
             await RequestFileService.GetFile(RequestedFile);
-            Navigation.NavigateTo("/req/"+RequestedFile);
+            Navigation.NavigateTo("/req/" + reqFile);
         } else if (isAdmin)
         {
             await RequestFileService.GetFile(RequestedFile);
-            Navigation.NavigateTo("/req/" + RequestedFile);
+            Navigation.NavigateTo("/req/" + reqFile);
         }
     }
 

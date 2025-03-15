@@ -2386,13 +2386,6 @@ C:\Users\j.klaus\Desktop\Razor\Razor\obj\Debug\net9.0\refint\Razor.dll
 C:\Users\j.klaus\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.pdb
 C:\Users\j.klaus\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.genruntimeconfig.cache
 C:\Users\j.klaus\Desktop\Razor\Razor\obj\Debug\net9.0\ref\Razor.dll
-C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.csproj.AssemblyReference.cache
-C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.AssemblyInfoInputs.cache
-C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.AssemblyInfo.cs
-C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.csproj.CoreCompileInputs.cache
-C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.sourcelink.json
 C:\Users\Tenno\Desktop\Razor\Razor\bin\Debug\net9.0\appsettings.Development.json
 C:\Users\Tenno\Desktop\Razor\Razor\bin\Debug\net9.0\appsettings.json
 C:\Users\Tenno\Desktop\Razor\Razor\bin\Debug\net9.0\Razor.staticwebassets.runtime.json
@@ -2534,6 +2527,13 @@ C:\Users\Tenno\Desktop\Razor\Razor\bin\Debug\net9.0\runtimes\win-arm\native\e_sq
 C:\Users\Tenno\Desktop\Razor\Razor\bin\Debug\net9.0\runtimes\win-arm64\native\e_sqlite3.dll
 C:\Users\Tenno\Desktop\Razor\Razor\bin\Debug\net9.0\runtimes\win-x64\native\e_sqlite3.dll
 C:\Users\Tenno\Desktop\Razor\Razor\bin\Debug\net9.0\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.csproj.AssemblyReference.cache
+C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.AssemblyInfoInputs.cache
+C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.AssemblyInfo.cs
+C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.csproj.CoreCompileInputs.cache
+C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.sourcelink.json
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\scopedcss\Components\Layout\MainLayout.razor.rz.scp.css
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\scopedcss\bundle\Razor.styles.css
@@ -4645,8 +4645,8 @@ C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\compressed\c9tti4dbdx-h1s4si
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\compressed\8gktmbtsf2-4d85u1mtcx.gz
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\compressed\dak6vrmisy-0j3bgjxly4.gz
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\compressed\eojifsclv0-7t9tbfaemk.gz
-C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\compressed\eebyx6wsfs-4ft87qdqsk.gz
-C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\compressed\yx1kvmgcpp-0ayxdzjoaq.gz
+C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\compressed\eebyx6wsfs-2f01bghbq5.gz
+C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\compressed\yx1kvmgcpp-yxkputhkqq.gz
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\staticwebassets.build.endpoints.json
@@ -4662,3 +4662,4 @@ C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\refint\Razor.dll
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.pdb
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\Razor.genruntimeconfig.cache
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\ref\Razor.dll
+C:\Users\Tenno\Desktop\Razor\Razor\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

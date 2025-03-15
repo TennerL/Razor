@@ -386,7 +386,6 @@ C:\Users\Tenno\Desktop\Razor\Razor\obj\Release\net9.0\Razor.pdb
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Release\net9.0\Razor.genruntimeconfig.cache
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Release\net9.0\ref\Razor.dll
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Release\net9.0\compressed\s3k1vit0a6-0gvitdch0g.gz
-C:\Users\Tenno\Desktop\Razor\Razor\obj\Release\net9.0\compressed\yx1kvmgcpp-0ayxdzjoaq.gz
 C:\Users\j.klaus\Desktop\Razor\Razor\bin\Release\net9.0\BlazorBootstrap.dll
 C:\Users\j.klaus\Desktop\Razor\Razor\bin\Release\net9.0\Microsoft.AspNetCore.Authorization.dll
 C:\Users\j.klaus\Desktop\Razor\Razor\bin\Release\net9.0\Microsoft.AspNetCore.Components.dll
@@ -4551,4 +4550,5 @@ C:\Users\Tenno\Desktop\Razor\Razor\obj\Release\net9.0\compressed\9of6b88kzk-x8t6
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Release\net9.0\compressed\1uysw0b5j0-jj029w6lqp.gz
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Release\net9.0\compressed\vpyddb9vsj-wzoiqkdg8a.gz
 C:\Users\Tenno\Desktop\Razor\Razor\obj\Release\net9.0\compressed\eojifsclv0-7t9tbfaemk.gz
-C:\Users\Tenno\Desktop\Razor\Razor\obj\Release\net9.0\compressed\eebyx6wsfs-4ft87qdqsk.gz
+C:\Users\Tenno\Desktop\Razor\Razor\obj\Release\net9.0\compressed\eebyx6wsfs-2f01bghbq5.gz
+C:\Users\Tenno\Desktop\Razor\Razor\obj\Release\net9.0\compressed\yx1kvmgcpp-yxkputhkqq.gz

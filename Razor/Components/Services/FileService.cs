@@ -6,18 +6,67 @@ using System.Linq;
 public class FileService
 {
 
-        private readonly string _directoryPath = @"\\WIN-QQ32S3B1B3S\t\NS-Archiv\Bücher";
+        private string _directoryPath = @"\\WIN-QQ32S3B1B3S\t\";
+        //private string _directoryPath = @"C:\Users\Tenno\Downloads\";
+
         public List<string> GetFiles()
         {
-        if (!Directory.Exists(_directoryPath))
-        {
-            return new List<string>(); 
+            if(!Directory.Exists(_directoryPath))
+            {
+                return new List<string>();
+            }
+            var filesAndDirs = new List<string>();
+
+            var files = Directory.GetFiles(_directoryPath).Select(Path.GetFileName).ToList();
+            filesAndDirs.AddRange(files);
+
+            return filesAndDirs;
         }
-        return Directory.GetFiles(_directoryPath)
-                        .Select(Path.GetFileName)
-                        .ToList();
+
+        public List<string> GetFolders()
+        {
+            if (!Directory.Exists(_directoryPath))
+            {
+                return new List<string>();
+            }
+
+            var folders = new List<string>();
+
+            var directorys = Directory.GetDirectories(_directoryPath).Select(Path.GetFileName).ToList();
+            folders.AddRange(directorys);
+            return folders;
+        }
+
+        public List<string> FetchFilesFromFolder(string file)
+        {
+            var requestedPath = string.Concat(_directoryPath, file);
+            if(!Directory.Exists(requestedPath))
+            {
+                return new List<string>();
+            }
+            var filesAndDirs = new List<string>();
+
+            var files = Directory.GetFiles(requestedPath).Select(Path.GetFileName).ToList();
+            filesAndDirs.AddRange(files);
+
+            return filesAndDirs;
+        }
+
+        public List<string> FetchFoldersFromFolder(string file)
+        {
+            var requestedPath = string.Concat(_directoryPath, file);
+            if (!Directory.Exists(requestedPath))
+            {
+                return new List<string>();
+            }
+            var folders = new List<string>();
+            var directorys = Directory.GetDirectories(requestedPath).Select(Path.GetFileName).ToList();
+            folders.AddRange(directorys);
+
+            return folders;
+        }
+
     }
-}
 }
 
 

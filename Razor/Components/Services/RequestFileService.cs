@@ -16,12 +16,24 @@ namespace Razor.Components.Services
             _cleanupService = cleanupService;
         }
         private readonly string _localFileDir = AppDomain.CurrentDomain.BaseDirectory + @"\req\";
-        private readonly string _FilePath = @"\\WIN-QQ32S3B1B3S\t\NS-Archiv\Bücher\";
+        private readonly string _FilePath = @"\\WIN-QQ32S3B1B3S\t\";
+      
 
         public async Task GetFile(string RequestedFile)
         {
+            var destinationFile = "";
+            int lastIndex = RequestedFile.LastIndexOf("&");
+            if (lastIndex != -1)
+            {
+                destinationFile = RequestedFile.Substring(lastIndex + 1);
+                RequestedFile = RequestedFile.Replace("&", @"\");
+            }
+            else
+            {
+                destinationFile = RequestedFile;
+            }
             var FullPathOrigin = string.Concat(_FilePath, RequestedFile);
-            var FullPathDestination = string.Concat(_localFileDir, RequestedFile);
+            var FullPathDestination = string.Concat(_localFileDir, destinationFile);
 
             await using var sourceStream = File.OpenRead(FullPathOrigin);
             await using var destinationStream = File.Create(FullPathDestination);
