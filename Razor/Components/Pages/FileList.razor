@@ -3,8 +3,6 @@
 @rendermode InteractiveServer
 @attribute [Authorize]
 
-<h3>Verzeichnis: </h3>
-
 @if (files == null && folders == null)
 {
     <p>Lade Dateien...</p>
@@ -16,16 +14,14 @@ else if (!files.Any() && !folders.Any())
 else
 {
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <button class="btn btn-link" @onclick="() => OnInitialized()"><span class="bi-house-fill"></span></button>
+        <ol class="breadcrumb" style="display:block; border:1px solid; border-radius:10px">
+            <button class="btn btn-link" @onclick="@(() => GoToFolder("root"))"><span class="bi-house-fill"></span></button>
             @foreach(var breadcrump in breadcrumpParts)
             {
-                @* <li class="breadcrumb-item" href="#">@breadcrump</li> *@
-                <button class="btn btn-link" @onclick="() => GoToFolder(breadcrump)">@breadcrump</button>
+                <button class="btn btn-link" style="color:white; text-decoration:none;" @onclick="() => GoToFolder(breadcrump)">@breadcrump</button>
             }
         </ol>
     </nav>
-
 
     <input class="form-control" placeholder="Suche" @bind="searchTerm" @oninput="OnSearchChanged" />
 
@@ -37,20 +33,34 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var (folder, index) in PagedFolders.Select((folder, index) => (folder, index + 1)))
-            {
-                <tr>
-                    <td>@((currentPage - 1) * itemsPerPage + index)</td>
-                    <td><button class="btn btn-link" @onclick="() => GoToFolder(folder)">@folder</button></td>
-                </tr>
+            @{
+                int index = (currentPage - 1) * itemsPerPage + 1;
             }
-            @foreach (var (file, index) in PagedFiles.Select((file, index) => (file, index + 1)))
+            @foreach (var item in PagedItems)
             {
-                <tr>
-                    <td>@((currentPage - 1) * itemsPerPage + index)</td>
-                    <td><a href="https://test.nihonsaba.net/files/@string.Concat(currentPath.Replace(@"\","&"),file)">@file</a></td>
-                </tr>
+            <tr>
+                <td>@index</td>
+                <td>
+                        @if (item.IsFolder)
+                        {
+                            <button class="btn btn-link" @onclick="() => GoToFolder(item.Name)" 
+                                    style="text-decoration:none; color:white;">
+                                [Dir] @item.Name
+                            </button>
+                        }
+                        else
+                        {
+                            <a href="https://test.nihonsaba.net/files/@string.Concat(currentPath.Replace(@"\","&"),"&"+item.Name)" 
+                               style="text-decoration:none; color:white;">
+                                @item.Name
+                            </a>
+                        }
+                </td>
+            </tr>
+                index++;
             }
+
+
         </tbody>
     </table>
 
@@ -80,22 +90,26 @@ else
 @code {
     private List<string> files = new();
     private List<string> folders = new();
+    private List<string> breadcrumpParts = new();
     private int currentPage = 1;
     private int itemsPerPage = 25;
     private int totalPages = 1;
     private string currentPath = "";
-    private List<string> breadcrumpParts = new();
     private string searchTerm = "";
+    private string breadcrumbPath = "";
 
-    private IEnumerable<string> PagedFiles => files
-        .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-        .Skip((currentPage - 1) * itemsPerPage)
-        .Take(itemsPerPage);
+    private IEnumerable<(string Name, bool IsFolder)> PagedItems => 
+        folders
+            .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+            .Select(f => (f, true)) // Mark as folder
+            .Concat(
+                files
+                    .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    .Select(f => (f, false)) // Mark as file
+            )
+            .Skip((currentPage - 1) * itemsPerPage)
+            .Take(itemsPerPage);
 
-    private IEnumerable<string> PagedFolders => folders
-        .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-        .Skip((currentPage - 1) * itemsPerPage)
-        .Take(itemsPerPage);
 
     protected override void OnInitialized()
     {
@@ -116,20 +130,49 @@ else
         UpdateTotalPages();
         currentPage = 1;
     }
+
     private void GoToFolder(string folder)
     {
-        breadcrumpParts.Clear();
-        currentPath += folder + @"\";
-        breadcrumpParts.Add(currentPath);
+        if (folder == "root")
+        {
+            currentPath = "";
+            breadcrumpParts.Clear();
+        }
+        else
+        {
+            if (!currentPath.EndsWith(@"\")) { currentPath = currentPath + @"\"; }
 
-        folders = FileService.FetchFoldersFromFolder(currentPath);
-        files = FileService.FetchFilesFromFolder(currentPath);
+            int index = breadcrumpParts.LastIndexOf(folder);
+            if (index >= 0)
+            {
+                currentPath = string.Join(@"\", breadcrumpParts.Take(index + 1));
+                breadcrumpParts = breadcrumpParts.Take(index + 1).ToList();
+            }
+            else
+            {
+                currentPath += folder;
+                breadcrumpParts.Add(folder);
+            }
+        }
+
+        if (currentPath.StartsWith(@"\"))
+        {
+            currentPath = currentPath.TrimStart('\\');
+        }
+
+        string pathForFetching = currentPath;
+        if (!string.IsNullOrEmpty(pathForFetching) && !pathForFetching.EndsWith(@"\"))
+        {
+            pathForFetching += @"\";
+        }
+
+        folders = FileService.FetchFoldersFromFolder(pathForFetching);
+        files = FileService.FetchFilesFromFolder(pathForFetching);
 
         UpdateTotalPages();
         currentPage = 1;
+        StateHasChanged();
     }
-
-
 
     private void HandleItemsPerPageChange(ChangeEventArgs e)
     {
@@ -138,18 +181,22 @@ else
             itemsPerPage = newItemsPerPage;
             currentPage = 1;
             UpdateTotalPages();
+            StateHasChanged();
         }
     }
+
+
 
     private void UpdateTotalPages()
     {
-        totalPages = (int)Math.Ceiling((double)files.Count / itemsPerPage);
+        int totalItems = folders.Count(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) +
+                         files.Count(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
 
-        if (currentPage > totalPages && totalPages > 0)
-        {
-            currentPage = totalPages;
-        }
+        totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
+        if (totalPages == 0) totalPages = 1;
+        if (currentPage > totalPages) currentPage = totalPages;
     }
+
 
     private void PreviousPage()
     {
@@ -166,10 +213,11 @@ else
             currentPage++;
         }
     }
-    
+
     private void OnSearchChanged(ChangeEventArgs e)
     {
         searchTerm = e.Value?.ToString() ?? "";
         currentPage = 1;
+        UpdateTotalPages();
     }
 }

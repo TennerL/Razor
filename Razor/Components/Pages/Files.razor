@@ -82,6 +82,7 @@
             Navigation.NavigateTo("/req/" + reqFile);
         } else if (isAdmin)
         {
+
             await RequestFileService.GetFile(RequestedFile);
             Navigation.NavigateTo("/req/" + reqFile);
         }
