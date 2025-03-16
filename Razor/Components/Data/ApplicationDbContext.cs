@@ -11,4 +11,6 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     }
 
     public DbSet<FileAccessRule> FileAccessRules { get; set; }
+
+    public DbSet<RoleAttributes> RoleAttributes { get; set; }
 }

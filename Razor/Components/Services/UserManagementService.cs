@@ -41,10 +41,17 @@ namespace Razor.Components.Services
             return userList;
         }
 
-        public async Task<List<string>> GetRoles()
+        public async Task<List<RoleDto>> GetRoles()
         {
-            var roles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
-            return roles.Any() ? roles : new List<string> { "Keine Rollen vorhanden" };
+            var roleList = await _roleManager.Roles
+                .Select(r => new RoleDto
+                {
+                    Id = r.Id,
+                    Name = r.Name
+                })
+                .ToListAsync();
+
+            return roleList.Any() ? roleList : new List<RoleDto> { new RoleDto { Name = "Keine Rollen vorhanden" } };
         }
 
 

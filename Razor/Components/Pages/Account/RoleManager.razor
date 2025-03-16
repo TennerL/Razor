@@ -1,4 +1,5 @@
 ﻿@inject UserManagementService UserManagementService
+@inject RoleAttributeService RoleAttributeService
 @rendermode InteractiveServer
 
 <h3>Rolenverwaltung</h3>
@@ -7,17 +8,17 @@
     <option value="">Auswahl</option>
     @foreach(var role in roles)
     {
-        <option value="@role">@role</option>
+        <option value="@role.Id">@role.Name</option>
     }
 </select>
 
-@if (!string.IsNullOrEmpty(selectedRole))
+@if (!string.IsNullOrEmpty(selectedId))
 {
     <div class="row" style="margin-top:10px;">
         <div class="col">
             <label for="mediaControl">Medienfeatures: </label>
             <div id="mediaControl" class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="switchMediaControl" />
+                <input class="form-check-input" type="checkbox" role="switch" id="switchMediaControl" @onchange="OnMediaControlChanged" />
             </div>
         </div>
     </div>
@@ -26,8 +27,17 @@
 
 
 @code {
-    List<string> roles = new();
-    string selectedRole = "";
+    List<RoleDto> roles = new();
+    string selectedId = "";
+    private bool IsMediaControlEnabled { get; set; }
+
+    private async Task OnMediaControlChanged(ChangeEventArgs e)
+    {
+        IsMediaControlEnabled = (bool)e.Value;
+
+        await AddRoleAttributes(IsMediaControlEnabled);
+    }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -41,7 +51,20 @@
 
     private async Task OnChangedRole(string role)
     {
-        selectedRole = role;
+        selectedId = role;
+    }
+
+    private async Task AddRoleAttributes(bool isActive)
+    {
+        var value = "";
+        if (isActive)
+        {
+            value = "Yes";
+        } else
+        {
+            value = "No";
+        }
+        await RoleAttributeService.AddRoleAttributes(selectedId, "MediaControl", value);
     }
 
 }
