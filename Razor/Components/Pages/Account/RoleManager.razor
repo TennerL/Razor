@@ -1,5 +1,47 @@
-﻿<h3>RoleManager</h3>
+﻿@inject UserManagementService UserManagementService
+@rendermode InteractiveServer
+
+<h3>Rolenverwaltung</h3>
+
+<select class="form-select" @onchange="async (e) => await OnChangedRole(e.Value?.ToString())">
+    <option value="">Auswahl</option>
+    @foreach(var role in roles)
+    {
+        <option value="@role">@role</option>
+    }
+</select>
+
+@if (!string.IsNullOrEmpty(selectedRole))
+{
+    <div class="row" style="margin-top:10px;">
+        <div class="col">
+            <label for="mediaControl">Medienfeatures: </label>
+            <div id="mediaControl" class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchMediaControl" />
+            </div>
+        </div>
+    </div>
+
+}
+
 
 @code {
+    List<string> roles = new();
+    string selectedRole = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        LoadRoles();
+    }
+
+    private async Task LoadRoles()
+    {
+        roles = await UserManagementService.GetRoles();
+    }
+
+    private async Task OnChangedRole(string role)
+    {
+        selectedRole = role;
+    }
 
 }

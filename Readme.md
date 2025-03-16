@@ -2,6 +2,24 @@ Playground for myself to get into Blazor programming! This might become a useful
 
 Im deploying the app with VS 2022 directly to my IIS Webserver 
 
+
+The application as it is provides safe and efficient directory browsing and file fetching from an external source.
+It also comes with built-in user management features, role management and enables setting custom access rules for individual files. 
+
+For future development I'd like to add:
+
+- Multimedia features e.g. embedded Image and video viewing, maybe thumbnails 
+
+- Option to upload files 
+
+- Destinction between userdirectorys. As it is, it only supports one remote source 
+
+- Making file fetching even more secure with an generated "access token" or some sort like that 
+
+- Maybe later adding Nextcloud-like features  
+
+
+
 To Initialize the Database:
 
 >dotnet tool install --global dotnet-ef

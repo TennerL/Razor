@@ -17,7 +17,7 @@
 <div class="row">
     <div class="col-4">
         <Button Color="ButtonColor.Secondary" @onclick="OnShowModalClick"><span class="bi-people-fill" /> Nutzerverwaltung </Button>
-        <Button Color="ButtonColor.Secondary"><span class="bi-person-fill-gear" /> Rollenverwaltung</Button>
+        <Button Color="ButtonColor.Secondary" @onclick="OnShowModalClickRoles"><span class="bi-person-fill-gear" /> Rollenverwaltung</Button>
     </div>
 </div>
 <hr />
@@ -25,6 +25,12 @@
 <Modal @ref="modal" Title="Nutzerverwaltung">
     <BodyTemplate>
         <Register />
+    </BodyTemplate>
+</Modal>
+
+<Modal @ref="modalRoles" Title="Rollenverwaltung">
+    <BodyTemplate>
+        <RoleManager />
     </BodyTemplate>
 </Modal>
 
@@ -111,6 +117,7 @@
 @code {
 
     private Modal modal = default!;
+    private Modal modalRoles = default!;
 
     private async Task OnShowModalClick()
     {
@@ -124,6 +131,22 @@
         if (modal != null)
         {
             await modal.HideAsync();
+        }
+    }
+
+    public async Task OnShowModalClickRoles()
+    {
+        if (modalRoles != null)
+        {
+            await modalRoles.ShowAsync();
+        }  
+    }
+
+    public async Task OnHideModalClickRoles()
+    {
+        if (modalRoles != null)
+        {
+            await modalRoles.HideAsync();
         }
     }
 

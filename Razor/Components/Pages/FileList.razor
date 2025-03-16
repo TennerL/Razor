@@ -38,25 +38,25 @@ else
             }
             @foreach (var item in PagedItems)
             {
-            <tr>
-                <td>@index</td>
-                <td>
+                <tr>
+                    <td>@index</td>
+                    <td>
                         @if (item.IsFolder)
                         {
                             <button class="btn btn-link" @onclick="() => GoToFolder(item.Name)" 
-                                    style="text-decoration:none; color:white;">
+                            style="text-decoration:none; color:white;">
                                 [Dir] @item.Name
                             </button>
                         }
                         else
                         {
                             <a href="https://test.nihonsaba.net/files/@string.Concat(currentPath.Replace(@"\","&"),"&"+item.Name)" 
-                               style="text-decoration:none; color:white;">
+                            style="text-decoration:none; color:white;">
                                 @item.Name
                             </a>
                         }
-                </td>
-            </tr>
+                    </td>
+                </tr>
                 index++;
             }
 
@@ -84,6 +84,9 @@ else
                 Weiter
             </button>
         </div>
+        <div class="col-sm-8" style="text-align:end;">
+            <p>Gesamt: @totalCount</p>
+        </div>
     </div>
 }
 
@@ -91,6 +94,7 @@ else
     private List<string> files = new();
     private List<string> folders = new();
     private List<string> breadcrumpParts = new();
+    private int totalCount = 0;
     private int currentPage = 1;
     private int itemsPerPage = 25;
     private int totalPages = 1;
@@ -143,7 +147,7 @@ else
             if (!currentPath.EndsWith(@"\")) { currentPath = currentPath + @"\"; }
 
             int index = breadcrumpParts.LastIndexOf(folder);
-            if (index >= 0)
+            if (index >= 0 && index < breadcrumpParts.Count - 1)
             {
                 currentPath = string.Join(@"\", breadcrumpParts.Take(index + 1));
                 breadcrumpParts = breadcrumpParts.Take(index + 1).ToList();
@@ -195,6 +199,8 @@ else
         totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
         if (totalPages == 0) totalPages = 1;
         if (currentPage > totalPages) currentPage = totalPages;
+
+        totalCount = totalItems;
     }
 
 
