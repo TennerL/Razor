@@ -18,7 +18,7 @@
         <div class="col">
             <label for="mediaControl">Medienfeatures: </label>
             <div id="mediaControl" class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="switchMediaControl" @onchange="OnMediaControlChanged" />
+                <input class="form-check-input" type="checkbox" role="switch" checked="@IsMediaControlEnabled" id="switchMediaControl" @onchange="OnMediaControlChanged" />
             </div>
         </div>
     </div>
@@ -28,8 +28,11 @@
 
 @code {
     List<RoleDto> roles = new();
+    RoleAttributes roleAttribute = new();
+    List<UserDto> users = new();
+
     string selectedId = "";
-    private bool IsMediaControlEnabled { get; set; }
+    private bool IsMediaControlEnabled = false;
 
     private async Task OnMediaControlChanged(ChangeEventArgs e)
     {
@@ -38,10 +41,9 @@
         await AddRoleAttributes(IsMediaControlEnabled);
     }
 
-
     protected override async Task OnInitializedAsync()
     {
-        LoadRoles();
+        await LoadRoles();
     }
 
     private async Task LoadRoles()
@@ -49,22 +51,21 @@
         roles = await UserManagementService.GetRoles();
     }
 
+    private async Task LoadRoleAttributes()
+    {
+        roleAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "MediaControl");
+        IsMediaControlEnabled = roleAttribute?.Value == true;
+    }
+
     private async Task OnChangedRole(string role)
     {
         selectedId = role;
+        await LoadRoleAttributes();
     }
 
     private async Task AddRoleAttributes(bool isActive)
     {
-        var value = "";
-        if (isActive)
-        {
-            value = "Yes";
-        } else
-        {
-            value = "No";
-        }
-        await RoleAttributeService.AddRoleAttributes(selectedId, "MediaControl", value);
+        await RoleAttributeService.AddRoleAttributes(selectedId, "MediaControl", isActive);
     }
 
 }

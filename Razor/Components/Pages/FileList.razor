@@ -1,5 +1,11 @@
 @page "/filelist"
+@using BlazorBootstrap;
+@using System.Security.Claims
+@inject IJSRuntime JS
 @inject FileService FileService
+@inject RoleAttributeService RoleAttributeService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManagementService UserManagementService
 @rendermode InteractiveServer
 @attribute [Authorize]
 
@@ -16,7 +22,7 @@ else
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb" style="display:block; border:1px solid; border-radius:10px">
             <button class="btn btn-link" @onclick="@(() => GoToFolder("root"))"><span class="bi-house-fill"></span></button>
-            @foreach(var breadcrump in breadcrumpParts)
+            @foreach (var breadcrump in breadcrumpParts)
             {
                 <button class="btn btn-link" style="color:white; text-decoration:none;" @onclick="() => GoToFolder(breadcrump)">@breadcrump</button>
             }
@@ -43,17 +49,25 @@ else
                     <td>
                         @if (item.IsFolder)
                         {
-                            <button class="btn btn-link" @onclick="() => GoToFolder(item.Name)" 
-                            style="text-decoration:none; color:white;">
+                            <button class="btn btn-link" @onclick="() => GoToFolder(item.Name)"
+                            style="text-decoration:none; color:white; margin: 0; padding: 0;">
                                 [Dir] @item.Name
                             </button>
                         }
                         else
                         {
-                            <a href="https://test.nihonsaba.net/files/@string.Concat(currentPath.Replace(@"\","&"),"&"+item.Name)" 
-                            style="text-decoration:none; color:white;">
-                                @item.Name
-                            </a>
+                            if(!mediaControlFeature)
+                            {
+                                <a href="https://test.nihonsaba.net/files/@string.Concat(currentPath.Replace(@"\","&"),"&"+item.Name)"
+                                style="text-decoration:none; color:white;">
+                                    @item.Name
+                                </a>
+                            } else
+                            {
+                                <button class="btn btn-link" @onclick="() => GetFileStream(currentPath, item.Name)"
+                                style="text-decoration:none; color:white; margin: 0; padding: 0;">@item.Name</button>
+                            }
+                        ;
                         }
                     </td>
                 </tr>
@@ -90,36 +104,128 @@ else
     </div>
 }
 
+
+<Modal @ref="media" Title="Medienanzeige">
+    <BodyTemplate>
+        @if (!string.IsNullOrEmpty(mediaFileUrl))
+        {
+            @if (mediaFileUrl.EndsWith(".mp4") || mediaFileUrl.EndsWith(".webm") || mediaFileUrl.EndsWith(".mkv"))
+            {
+                <video controls width="100%" autoplay>
+                    <source src="@mediaFileUrl" type="video/mp4">
+                    <source src="@mediaFileUrl" type="video/webm">
+                    <source src="@mediaFileUrl" type="video/x-matroska">
+                    Dein Browser unterstützt kein Video-Tag.
+                </video>
+            }
+            else if (mediaFileUrl.EndsWith(".mp3") || mediaFileUrl.EndsWith(".wav") || mediaFileUrl.EndsWith(".ogg"))
+            {
+                <audio controls autoplay>
+                    <source src="@mediaFileUrl" type="audio/mpeg">
+                    <source src="@mediaFileUrl" type="audio/wav">
+                    <source src="@mediaFileUrl" type="audio/ogg">
+                    Dein Browser unterstützt kein Audio-Tag.
+                </audio>
+            }
+            else if (mediaFileUrl.EndsWith(".jpg") || mediaFileUrl.EndsWith(".jpeg") || mediaFileUrl.EndsWith(".png") || mediaFileUrl.EndsWith(".gif"))
+            {
+                <img src="@mediaFileUrl" alt="Bild" style="max-width:100%; height:auto;">
+            }
+            else if (mediaFileUrl.EndsWith(".pdf"))
+            {
+                <iframe src="@mediaFileUrl" width="100%" height="500px"></iframe>
+            }
+            else
+            {
+                <p>Dateiformat nicht unterstützt.</p>
+                <a href="@mediaFileUrl" target="_blank">Datei öffnen</a>
+            }
+        }
+    </BodyTemplate>
+</Modal>
+
 @code {
+    private Modal media = default!;
+    private string mediaFileUrl = "";
+    private int currentMediaIndex = 0;
+
     private List<string> files = new();
     private List<string> folders = new();
     private List<string> breadcrumpParts = new();
+    private List<string> roles = new();
+    private RoleAttributes roleAttributes = new();
     private int totalCount = 0;
     private int currentPage = 1;
     private int itemsPerPage = 25;
     private int totalPages = 1;
+    private string role = "";
     private string currentPath = "";
     private string searchTerm = "";
     private string breadcrumbPath = "";
+    private bool mediaControlFeature = false;
 
-    private IEnumerable<(string Name, bool IsFolder)> PagedItems => 
+    private async Task GetFileStream(string currentPath, string requestedFile)
+    {
+        currentMediaIndex = files.IndexOf(requestedFile);
+        mediaFileUrl = $"https://test.nihonsaba.net/files/{currentPath.Replace(@"\", "&")}&{requestedFile}";
+        await media.ShowAsync();
+    }
+
+    private async Task OnShowModalClick()
+    {
+        if(media != null)
+        {
+            await media.ShowAsync();
+        }
+    }
+
+    private async Task OnHideModalClick()
+    {
+        if (media != null)
+        {
+            await media.HideAsync();
+        }
+    }
+
+    private IEnumerable<(string Name, bool IsFolder)> PagedItems =>
         folders
             .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-            .Select(f => (f, true)) // Mark as folder
+            .Select(f => (f, true)) 
             .Concat(
                 files
                     .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                    .Select(f => (f, false)) // Mark as file
+                    .Select(f => (f, false)) 
             )
             .Skip((currentPage - 1) * itemsPerPage)
             .Take(itemsPerPage);
 
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         breadcrumpParts.Clear();
         LoadFolders();
         LoadFiles();
+        await LoadRoles();
+    }
+
+    protected async Task LoadRoles()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User.Identity;
+        var userId = authState.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (userId != null)
+        {
+            roles = await UserManagementService.GetRoleOfUserAsync(userId);
+            role = roles.First();
+        }
+        StateHasChanged();
+        await LoadRoleAttributes();
+    }
+
+    public async Task LoadRoleAttributes()
+    {
+        roleAttributes = await RoleAttributeService.GetRoleAttribute(role, "MediaControl");
+        mediaControlFeature = roleAttributes.Value;
     }
 
     private void LoadFiles()

@@ -7,7 +7,6 @@ public class FileService
 {
 
         private string _directoryPath = @"\\WIN-QQ32S3B1B3S\t\";
-        //private string _directoryPath = @"C:\Users\Tenno\Downloads\";
 
         public List<string> GetFiles()
         {

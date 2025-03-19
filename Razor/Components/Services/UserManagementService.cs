@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +40,25 @@ namespace Razor.Components.Services
                 });
             }
             return userList;
+        }
+
+        public async Task<List<string>> GetRoleOfUserAsync(string userId)
+        {
+            var IdentityUser = await _userManager.FindByIdAsync(userId);
+
+            var roleNames = await _userManager.GetRolesAsync(IdentityUser);
+            var roleIds = new List<string>();
+
+            foreach (var roleName in roleNames)
+            {
+                var role = await _roleManager.FindByNameAsync(roleName);
+                if(role != null)
+                {
+                    roleIds.Add(role.Id);
+                }
+            }
+
+            return roleIds;
         }
 
         public async Task<List<RoleDto>> GetRoles()
@@ -89,6 +109,7 @@ namespace Razor.Components.Services
             var addResult = await _userManager.AddToRoleAsync(user, model.NewRole);
             return addResult.Succeeded;
         }
+
         public async Task<bool> IsUserInRoleAsync(string userId, string roleName)
         {
             var user = await _userManager.FindByIdAsync(userId);

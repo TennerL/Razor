@@ -32,6 +32,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Tenno/Desktop/Razor/Razor/Components/Pages/Account/Admin.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBY2NvdW50XEFkbWluLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Tenno/Desktop/Razor/Razor/Components/Pages/Account/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBY2NvdW50XExvZ2luLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -46,10 +50,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Tenno/Desktop/Razor/Razor/Components/Pages/Account/RoleManager.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBY2NvdW50XFJvbGVNYW5hZ2VyLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Tenno/Desktop/Razor/Razor/Components/Pages/Admin.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Tenno/Desktop/Razor/Razor/Components/Pages/Counter.razor]
@@ -70,6 +70,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Tenno/Desktop/Razor/Razor/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Tenno/Desktop/Razor/Razor/Components/Pages/Media/MediaControl.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xNZWRpYVxNZWRpYUNvbnRyb2wucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Tenno/Desktop/Razor/Razor/Components/Pages/Todo.razor]

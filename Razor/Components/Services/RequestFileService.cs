@@ -6,9 +6,9 @@ namespace Razor.Components.Services
     using Microsoft.VisualBasic;
     using Microsoft.AspNetCore.Components;
 
- 
 
-    public class RequestFileService 
+
+    public class RequestFileService
     {
         private readonly FileCleanupService _cleanupService;
         public RequestFileService(FileCleanupService cleanupService)
@@ -17,7 +17,7 @@ namespace Razor.Components.Services
         }
         private readonly string _localFileDir = AppDomain.CurrentDomain.BaseDirectory + @"\req\";
         private readonly string _FilePath = @"\\WIN-QQ32S3B1B3S\t\";
-      
+
 
         public async Task GetFile(string RequestedFile)
         {
@@ -41,6 +41,24 @@ namespace Razor.Components.Services
 
             _cleanupService.ScheduleFileDeletion(FullPathDestination, TimeSpan.FromMinutes(1));
 
+        }
+   
+
+        public async Task<Stream> GetStreamAsync(string requestedFile)
+        {
+            int lastIndex = requestedFile.LastIndexOf("&");
+            if (lastIndex != -1)
+            {
+                requestedFile = requestedFile.Replace("&", @"\");
+            }
+
+            var fullPathOrigin = Path.Combine(_FilePath, requestedFile);
+
+            if (!File.Exists(fullPathOrigin))
+            {
+                throw new FileNotFoundException("File not found", fullPathOrigin);
+            }
+            return new FileStream(fullPathOrigin, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
     }
 }
