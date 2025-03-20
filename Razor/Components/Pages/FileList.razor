@@ -20,18 +20,20 @@ else if (!files.Any() && !folders.Any())
 else
 {
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb" style="display:block; border:1px solid; border-radius:10px">
+        <ol class="breadcrumb" style="display:block; border:var(--bs-border-width) solid var(--bs-border-color); border-radius:10px">
             <button class="btn btn-link" @onclick="@(() => GoToFolder("root"))"><span class="bi-house-fill"></span></button>
             @foreach (var breadcrump in breadcrumpParts)
             {
-                <button class="btn btn-link" style="color:white; text-decoration:none;" @onclick="() => GoToFolder(breadcrump)">@breadcrump</button>
+                string fullPath = string.Join("|", breadcrumpParts.TakeWhile(b => b != breadcrump).Concat(new[] { breadcrump }));
+                <button class="btn btn-link" style="color:white; text-decoration:none;" @onclick="() => GoToFolder(breadcrump)"
+                disabled="@(currentPath == fullPath)">@breadcrump</button>
             }
         </ol>
     </nav>
 
     <input class="form-control" placeholder="Suche" @bind="searchTerm" @oninput="OnSearchChanged" />
 
-    <table class="table table-striped" style="margin-top:10px;">
+    <table class="table table-striped" style="margin-top:10px;" @onfocusin="OnHideModalClick">
         <thead>
             <tr>
                 <th>#</th>
@@ -50,7 +52,7 @@ else
                         @if (item.IsFolder)
                         {
                             <button class="btn btn-link" @onclick="() => GoToFolder(item.Name)"
-                                    style="text-decoration:none; color:white; margin: 0; padding: 0;">
+                            style="text-decoration:none; color:white; margin: 0; padding: 0;">
                                 [Dir] @item.Name
                             </button>
                         }
@@ -59,14 +61,14 @@ else
                             if (!mediaControlFeature)
                             {
                                 <a href="https://test.nihonsaba.net/files/@string.Concat(currentPath.Replace(@"\","|"),"|"+item.Name)"
-                                   style="text-decoration:none; color:white;">
+                                style="text-decoration:none; color:white;">
                                     @item.Name
                                 </a>
                             }
                             else
                             {
                                 <button class="btn btn-link" @onclick="() => GetFileStream(currentPath, item.Name)"
-                                        style="text-decoration:none; color:white; margin: 0; padding: 0;">
+                                style="text-decoration:none; color:white; margin: 0; padding: 0;">
                                     @item.Name
                                 </button>
                             }
@@ -108,7 +110,7 @@ else
 }
 
 
-<Modal @ref="media" Title="Medienanzeige" @onkeydown="@Enter">
+<Modal @ref="media" Title="Medienanzeige" UseStaticBackdrop="true" OnHidePrevented="OnHideModalClick" @onkeydown="@Enter">
     <BodyTemplate>
 
         @if (!string.IsNullOrEmpty(mediaFileUrl))
@@ -169,8 +171,8 @@ else
     private string currentPath = "";
     private string searchTerm = "";
     private string breadcrumbPath = "";
+    private string pathForFetching = "";
     private bool mediaControlFeature = false;
-    private string KeyPressed = "False";
 
 
     private async Task Enter(KeyboardEventArgs e)
@@ -277,6 +279,12 @@ else
 
     private void GoToFolder(string folder)
     {
+
+        if (Path.GetFileName(currentPath) == folder && currentPath.IndexOf(folder) !> 1)
+        {
+            return;
+        }
+
         if (folder == "root")
         {
             currentPath = "";
@@ -289,6 +297,7 @@ else
             int index = breadcrumpParts.LastIndexOf(folder);
             if (index >= 0 && index < breadcrumpParts.Count - 1)
             {
+                
                 currentPath = string.Join(@"\", breadcrumpParts.Take(index + 1));
                 breadcrumpParts = breadcrumpParts.Take(index + 1).ToList();
             }
@@ -304,7 +313,7 @@ else
             currentPath = currentPath.TrimStart('\\');
         }
 
-        string pathForFetching = currentPath;
+        pathForFetching = currentPath;
         if (!string.IsNullOrEmpty(pathForFetching) && !pathForFetching.EndsWith(@"\"))
         {
             pathForFetching += @"\";
