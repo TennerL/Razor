@@ -60,14 +60,12 @@
             }
         }
 
-
-
         bool hasPermission = await FileAccessService.HasAccess(RequestedFile, userId, "All");
 
         accessMessage = hasPermission ? "Zugriff" : "Kein Zugriff";
 
         var reqFile = "";
-        int lastIndex = RequestedFile.LastIndexOf("&");
+        int lastIndex = RequestedFile.LastIndexOf("|");
         if (lastIndex != -1)
         {
             reqFile = RequestedFile.Substring(lastIndex + 1);

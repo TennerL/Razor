@@ -1,1 +1,4 @@
 application.db 
+.vs
+bin/
+obj/

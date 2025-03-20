@@ -22,11 +22,11 @@ namespace Razor.Components.Services
         public async Task GetFile(string RequestedFile)
         {
             var destinationFile = "";
-            int lastIndex = RequestedFile.LastIndexOf("&");
+            int lastIndex = RequestedFile.LastIndexOf("|");
             if (lastIndex != -1)
             {
                 destinationFile = RequestedFile.Substring(lastIndex + 1);
-                RequestedFile = RequestedFile.Replace("&", @"\");
+                RequestedFile = RequestedFile.Replace("|", @"\");
             }
             else
             {
@@ -46,10 +46,10 @@ namespace Razor.Components.Services
 
         public async Task<Stream> GetStreamAsync(string requestedFile)
         {
-            int lastIndex = requestedFile.LastIndexOf("&");
+            int lastIndex = requestedFile.LastIndexOf("|");
             if (lastIndex != -1)
             {
-                requestedFile = requestedFile.Replace("&", @"\");
+                requestedFile = requestedFile.Replace("|", @"\");
             }
 
             var fullPathOrigin = Path.Combine(_FilePath, requestedFile);

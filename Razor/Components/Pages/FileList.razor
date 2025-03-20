@@ -50,24 +50,27 @@ else
                         @if (item.IsFolder)
                         {
                             <button class="btn btn-link" @onclick="() => GoToFolder(item.Name)"
-                            style="text-decoration:none; color:white; margin: 0; padding: 0;">
+                                    style="text-decoration:none; color:white; margin: 0; padding: 0;">
                                 [Dir] @item.Name
                             </button>
                         }
                         else
                         {
-                            if(!mediaControlFeature)
+                            if (!mediaControlFeature)
                             {
-                                <a href="https://test.nihonsaba.net/files/@string.Concat(currentPath.Replace(@"\","&"),"&"+item.Name)"
-                                style="text-decoration:none; color:white;">
+                                <a href="https://test.nihonsaba.net/files/@string.Concat(currentPath.Replace(@"\","|"),"|"+item.Name)"
+                                   style="text-decoration:none; color:white;">
                                     @item.Name
                                 </a>
-                            } else
+                            }
+                            else
                             {
                                 <button class="btn btn-link" @onclick="() => GetFileStream(currentPath, item.Name)"
-                                style="text-decoration:none; color:white; margin: 0; padding: 0;">@item.Name</button>
+                                        style="text-decoration:none; color:white; margin: 0; padding: 0;">
+                                    @item.Name
+                                </button>
                             }
-                        ;
+                    ;
                         }
                     </td>
                 </tr>
@@ -105,8 +108,9 @@ else
 }
 
 
-<Modal @ref="media" Title="Medienanzeige">
+<Modal @ref="media" Title="Medienanzeige" @onkeydown="@Enter">
     <BodyTemplate>
+
         @if (!string.IsNullOrEmpty(mediaFileUrl))
         {
             @if (mediaFileUrl.EndsWith(".mp4") || mediaFileUrl.EndsWith(".webm") || mediaFileUrl.EndsWith(".mkv"))
@@ -120,7 +124,7 @@ else
             }
             else if (mediaFileUrl.EndsWith(".mp3") || mediaFileUrl.EndsWith(".wav") || mediaFileUrl.EndsWith(".ogg"))
             {
-                <audio controls autoplay>
+                <audio controls>
                     <source src="@mediaFileUrl" type="audio/mpeg">
                     <source src="@mediaFileUrl" type="audio/wav">
                     <source src="@mediaFileUrl" type="audio/ogg">
@@ -141,8 +145,11 @@ else
                 <a href="@mediaFileUrl" target="_blank">Datei öffnen</a>
             }
         }
+
     </BodyTemplate>
 </Modal>
+
+
 
 @code {
     private Modal media = default!;
@@ -163,17 +170,44 @@ else
     private string searchTerm = "";
     private string breadcrumbPath = "";
     private bool mediaControlFeature = false;
+    private string KeyPressed = "False";
+
+
+    private async Task Enter(KeyboardEventArgs e)
+    {
+        if (files.Count == 0) return; 
+
+        if (e.Code == "ArrowRight")
+        {
+            if (currentMediaIndex < files.Count - 1)
+            {
+                currentMediaIndex++;
+                await GetFileStream(currentPath, files[currentMediaIndex]);
+            }
+        }
+        else if (e.Code == "ArrowLeft")
+        {
+            if (currentMediaIndex > 0)
+            {
+                currentMediaIndex--;
+                await GetFileStream(currentPath, files[currentMediaIndex]);
+            }
+        }
+    }
+
 
     private async Task GetFileStream(string currentPath, string requestedFile)
     {
         currentMediaIndex = files.IndexOf(requestedFile);
-        mediaFileUrl = $"https://test.nihonsaba.net/files/{currentPath.Replace(@"\", "&")}&{requestedFile}";
+        mediaFileUrl = $"https://test.nihonsaba.net/files/{currentPath.Replace(@"\", "|")}|{requestedFile}";
         await media.ShowAsync();
     }
 
+
+
     private async Task OnShowModalClick()
     {
-        if(media != null)
+        if (media != null)
         {
             await media.ShowAsync();
         }
@@ -190,11 +224,11 @@ else
     private IEnumerable<(string Name, bool IsFolder)> PagedItems =>
         folders
             .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-            .Select(f => (f, true)) 
+            .Select(f => (f, true))
             .Concat(
                 files
                     .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                    .Select(f => (f, false)) 
+                    .Select(f => (f, false))
             )
             .Skip((currentPage - 1) * itemsPerPage)
             .Take(itemsPerPage);
