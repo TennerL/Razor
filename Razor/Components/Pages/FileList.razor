@@ -21,12 +21,10 @@ else
 {
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb" style="display:block; border:var(--bs-border-width) solid var(--bs-border-color); border-radius:10px">
-            <button class="btn btn-link" @onclick="@(() => GoToFolder("root"))"><span class="bi-house-fill"></span></button>
+            <button class="btn btn-link" @onclick="@(() => GoToFolder("root","bcnav"))"><span class="bi-house-fill"></span></button>
             @foreach (var breadcrump in breadcrumpParts)
             {
-                string fullPath = string.Join("|", breadcrumpParts.TakeWhile(b => b != breadcrump).Concat(new[] { breadcrump }));
-                <button class="btn btn-link" style="color:white; text-decoration:none;" @onclick="() => GoToFolder(breadcrump)"
-                disabled="@(currentPath == fullPath)">@breadcrump</button>
+                <button class="btn btn-link" style="color:white; text-decoration:none;" @onclick="@(() => GoToFolder(breadcrump, "bcnav"))">@breadcrump</button>
             }
         </ol>
     </nav>
@@ -51,7 +49,7 @@ else
                     <td>
                         @if (item.IsFolder)
                         {
-                            <button class="btn btn-link" @onclick="() => GoToFolder(item.Name)"
+                            <button class="btn btn-link" @onclick="@(() => GoToFolder(item.Name, ""))"
                             style="text-decoration:none; color:white; margin: 0; padding: 0;">
                                 [Dir] @item.Name
                             </button>
@@ -91,6 +89,8 @@ else
             <select class="form-control" style="width:50px;" @onchange="HandleItemsPerPageChange">
                 <option value="25">25</option>
                 <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="1000">1000</option>
             </select>
 
             <button class="btn btn-primary" @onclick="PreviousPage" disabled="@(currentPage == 1)">
@@ -147,6 +147,7 @@ else
                 <a href="@mediaFileUrl" target="_blank">Datei öffnen</a>
             }
         }
+        @currentMediaIndex
 
     </BodyTemplate>
 </Modal>
@@ -173,36 +174,63 @@ else
     private string breadcrumbPath = "";
     private string pathForFetching = "";
     private bool mediaControlFeature = false;
+    public List<string> pagedFilesList { get; private set; } = new();
+    private bool isLoading = false;
 
+    private void UpdatePagedFilesList()
+    {
+        pagedFilesList = PagedItems
+            .Where(item => !item.IsFolder)
+            .Select(item => item.Name)
+            .ToList();
+    }
 
     private async Task Enter(KeyboardEventArgs e)
     {
-        if (files.Count == 0) return; 
+        if (pagedFilesList.Count == 0 || isLoading) return;
 
-        if (e.Code == "ArrowRight")
+        try
         {
-            if (currentMediaIndex < files.Count - 1)
+            isLoading = true;
+
+            if (e.Code == "ArrowRight")
             {
-                currentMediaIndex++;
-                await GetFileStream(currentPath, files[currentMediaIndex]);
+                if (currentMediaIndex < pagedFilesList.Count - 1)
+                {
+                    currentMediaIndex++;
+                    await GetFileStream(currentPath, pagedFilesList[currentMediaIndex]);
+                }
+            }
+            else if (e.Code == "ArrowLeft")
+            {
+                if (currentMediaIndex > 0)
+                {
+                    currentMediaIndex--;
+                    await GetFileStream(currentPath, pagedFilesList[currentMediaIndex]);
+                }
             }
         }
-        else if (e.Code == "ArrowLeft")
+        catch (Exception ex)
         {
-            if (currentMediaIndex > 0)
-            {
-                currentMediaIndex--;
-                await GetFileStream(currentPath, files[currentMediaIndex]);
-            }
+            Console.WriteLine($"Error navigating: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
         }
     }
 
 
+
     private async Task GetFileStream(string currentPath, string requestedFile)
     {
-        currentMediaIndex = files.IndexOf(requestedFile);
-        mediaFileUrl = $"https://test.nihonsaba.net/files/{currentPath.Replace(@"\", "|")}|{requestedFile}";
-        await media.ShowAsync();
+        currentMediaIndex = pagedFilesList.IndexOf(requestedFile);
+
+        if (currentMediaIndex >= 0)
+        {
+            mediaFileUrl = $"https://test.nihonsaba.net/files/{currentPath.Replace(@"\", "|")}|{requestedFile}";
+            await media.ShowAsync();
+        }
     }
 
 
@@ -277,50 +305,26 @@ else
         currentPage = 1;
     }
 
-    private void GoToFolder(string folder)
+    private void GoToFolder(string folder, string source)
     {
-
-        if (Path.GetFileName(currentPath) == folder && currentPath.IndexOf(folder) !> 1)
-        {
-            return;
-        }
-
-        if (folder == "root")
+        if (folder == "root" && source == "bcnav")
         {
             currentPath = "";
             breadcrumpParts.Clear();
-        }
-        else
+        } else if(string.IsNullOrEmpty(source))
         {
-            if (!currentPath.EndsWith(@"\")) { currentPath = currentPath + @"\"; }
-
-            int index = breadcrumpParts.LastIndexOf(folder);
-            if (index >= 0 && index < breadcrumpParts.Count - 1)
-            {
-                
-                currentPath = string.Join(@"\", breadcrumpParts.Take(index + 1));
-                breadcrumpParts = breadcrumpParts.Take(index + 1).ToList();
-            }
-            else
-            {
-                currentPath += folder;
-                breadcrumpParts.Add(folder);
-            }
+            breadcrumpParts.Add(folder + @"\");
+            currentPath = String.Join("",breadcrumpParts.ToArray());
         }
-
-        if (currentPath.StartsWith(@"\"))
+        else if (source == "bcnav")
         {
-            currentPath = currentPath.TrimStart('\\');
+            int i = breadcrumpParts.LastIndexOf(folder);
+            breadcrumpParts.RemoveRange(i + 1, breadcrumpParts.Count - (i + 1));
+            currentPath = String.Join("",breadcrumpParts.ToArray());
         }
 
-        pathForFetching = currentPath;
-        if (!string.IsNullOrEmpty(pathForFetching) && !pathForFetching.EndsWith(@"\"))
-        {
-            pathForFetching += @"\";
-        }
-
-        folders = FileService.FetchFoldersFromFolder(pathForFetching);
-        files = FileService.FetchFilesFromFolder(pathForFetching);
+        folders = FileService.FetchFoldersFromFolder(currentPath);
+        files = FileService.FetchFilesFromFolder(currentPath);
 
         UpdateTotalPages();
         currentPage = 1;
@@ -337,8 +341,6 @@ else
             StateHasChanged();
         }
     }
-
-
 
     private void UpdateTotalPages()
     {
@@ -374,5 +376,7 @@ else
         searchTerm = e.Value?.ToString() ?? "";
         currentPage = 1;
         UpdateTotalPages();
+        UpdatePagedFilesList();
+        StateHasChanged();
     }
 }
