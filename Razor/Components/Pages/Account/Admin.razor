@@ -1,16 +1,18 @@
 ﻿@page "/admin"
 @using System.Security.Claims
-@using BlazorBootstrap;
+@inherits LayoutComponentBase
+
 @inject FileAccessService FileAccessService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManagementService UserManagementService
+@inject ToastService ToastService
 @rendermode InteractiveServer
 @attribute [Authorize]
 
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
 
 <h2>Admin</h2>
-
-
 
 <hr />
 
@@ -117,6 +119,16 @@
     private Modal modal = default!;
     private Modal modalRoles = default!;
 
+    private void ShowMessage(ToastType toastType)
+    {
+        ToastService.Notify(new ToastMessage
+            {
+                Type = toastType,
+                Title = "Admin",
+                Message = $"Änderungen gespeichert {DateTime.Now}"
+            });
+    }
+
     private async Task OnShowModalClick()
     {
         if (modal != null)
@@ -185,12 +197,14 @@
             await FileAccessService.AddAccessRule(fileName,userId,"All");
         }
         await LoadAccessRules();
+        ShowMessage(ToastType.Dark);
     }
 
     private async Task DeleteRule(FileAccessRule rule)
     {
         await FileAccessService.DeleteAccessRule(rule);
         await LoadAccessRules();
+        ShowMessage(ToastType.Dark);
     }
 
 private async Task ChangeUserRole(UserDto user, string newRole)
@@ -207,6 +221,7 @@ private async Task ChangeUserRole(UserDto user, string newRole)
     if (result)
     {
         await LoadUsers();
+        ShowMessage(ToastType.Dark);
     }
     else
     {
@@ -220,6 +235,7 @@ private async Task ChangeUserRole(UserDto user, string newRole)
     {
         await UserManagementService.DeleteUserAsync(user.Id);
         await LoadUsers();
+        ShowMessage(ToastType.Dark);
     }
 
 }

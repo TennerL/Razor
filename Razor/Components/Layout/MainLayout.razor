@@ -5,6 +5,8 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager Navigation
 
+
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -29,6 +31,8 @@
     <span class="dismiss">🗙</span>
 </div>
 
+
+
 @code {
     private System.Security.Claims.ClaimsPrincipal user;
 
@@ -38,3 +42,4 @@
         user = authState.User;
     }
 }
+

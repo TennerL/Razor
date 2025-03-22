@@ -1,5 +1,7 @@
 ﻿@inject UserManagementService UserManagementService
 @inject RoleAttributeService RoleAttributeService
+@inject ToastService ToastService
+@using BlazorBootstrap;
 @rendermode InteractiveServer
 
 <h3>Rolenverwaltung</h3>
@@ -27,6 +29,7 @@
 
 
 @code {
+
     List<RoleDto> roles = new();
     RoleAttributes roleAttribute = new();
     List<UserDto> users = new();
@@ -34,10 +37,20 @@
     string selectedId = "";
     private bool IsMediaControlEnabled = false;
 
+    private void ShowMessage(ToastType toastType)
+    {
+        ToastService.Notify(new ToastMessage
+            {
+                Type = toastType,
+                Title = "Admin",
+                Message = $"Änderungen gespeichert {DateTime.Now}"
+            });
+    }
+
+
     private async Task OnMediaControlChanged(ChangeEventArgs e)
     {
         IsMediaControlEnabled = (bool)e.Value;
-
         await AddRoleAttributes(IsMediaControlEnabled);
     }
 
@@ -66,6 +79,7 @@
     private async Task AddRoleAttributes(bool isActive)
     {
         await RoleAttributeService.AddRoleAttributes(selectedId, "MediaControl", isActive);
+        ShowMessage(ToastType.Dark);
     }
 
 }

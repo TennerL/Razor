@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components.Authorization;
 using Razor.Components.Services;
 using Microsoft.Extensions.FileProviders;
-using BlazorBootstrap;
 
 var builder = WebApplication.CreateBuilder(args);
 

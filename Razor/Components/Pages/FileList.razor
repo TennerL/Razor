@@ -110,7 +110,7 @@ else
 }
 
 
-<Modal @ref="media" Title="Medienanzeige" UseStaticBackdrop="true" OnHidePrevented="OnHideModalClick" @onkeydown="@Enter">
+<Modal @ref="media" Title="Medienanzeige" UseStaticBackdrop="true" OnHidePrevented="OnHideModalClick" Size="ModalSize.Large" @onkeydown="@Enter">
     <BodyTemplate>
 
         @if (!string.IsNullOrEmpty(mediaFileUrl))
@@ -172,12 +172,8 @@ else
     private string role = "";
     private string currentPath = "";
     private string searchTerm = "";
-    private string breadcrumbPath = "";
-    private string pathForFetching = "";
     private bool mediaControlFeature = false;
     public List<string> pagedFilesList { get; private set; } = new();
-
-
 
     private void UpdatePagedFilesList()
     {
@@ -189,7 +185,10 @@ else
 
     private async Task Enter(KeyboardEventArgs e)
     {
-
+        if(e.Code == "Escape")
+        {
+            OnHideModalClick();
+        }
 
         if (e.Code == "ArrowRight")
         {
