@@ -1,4 +1,4 @@
 application.db 
 .vs
-bin/
-obj/
+Razor/bin/
+Razor/obj/
