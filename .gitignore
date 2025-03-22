@@ -4,3 +4,4 @@ application.db-wal
 .vs
 Razor/bin/
 Razor/obj/
+Razor/Migrations/

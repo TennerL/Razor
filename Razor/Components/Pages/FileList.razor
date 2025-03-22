@@ -117,7 +117,7 @@ else
         {
             @if (mediaFileUrl.EndsWith(".mp4") || mediaFileUrl.EndsWith(".webm") || mediaFileUrl.EndsWith(".mkv"))
             {
-                <video controls width="100%" autoplay>
+                <video controls width="100%" autoplay tabindex="-1">
                     <source src="@mediaFileUrl" type="video/mp4">
                     <source src="@mediaFileUrl" type="video/webm">
                     <source src="@mediaFileUrl" type="video/x-matroska">
@@ -148,6 +148,7 @@ else
             }
         }
         @currentMediaIndex
+        @mediaFileUrl
 
     </BodyTemplate>
 </Modal>
@@ -175,7 +176,8 @@ else
     private string pathForFetching = "";
     private bool mediaControlFeature = false;
     public List<string> pagedFilesList { get; private set; } = new();
-    private bool isLoading = false;
+
+
 
     private void UpdatePagedFilesList()
     {
@@ -187,40 +189,25 @@ else
 
     private async Task Enter(KeyboardEventArgs e)
     {
-        if (pagedFilesList.Count == 0 || isLoading) return;
 
-        try
+
+        if (e.Code == "ArrowRight")
         {
-            isLoading = true;
-
-            if (e.Code == "ArrowRight")
+            if (currentMediaIndex < pagedFilesList.Count - 1)
             {
-                if (currentMediaIndex < pagedFilesList.Count - 1)
-                {
-                    currentMediaIndex++;
-                    await GetFileStream(currentPath, pagedFilesList[currentMediaIndex]);
-                }
-            }
-            else if (e.Code == "ArrowLeft")
-            {
-                if (currentMediaIndex > 0)
-                {
-                    currentMediaIndex--;
-                    await GetFileStream(currentPath, pagedFilesList[currentMediaIndex]);
-                }
+                currentMediaIndex++;
+                await GetFileStream(currentPath, pagedFilesList[currentMediaIndex]);
             }
         }
-        catch (Exception ex)
+        else if (e.Code == "ArrowLeft")
         {
-            Console.WriteLine($"Error navigating: {ex.Message}");
-        }
-        finally
-        {
-            isLoading = false;
+            if (currentMediaIndex > 0)
+            {
+                currentMediaIndex--;
+                await GetFileStream(currentPath, pagedFilesList[currentMediaIndex]);
+            }
         }
     }
-
-
 
     private async Task GetFileStream(string currentPath, string requestedFile)
     {
@@ -228,12 +215,16 @@ else
 
         if (currentMediaIndex >= 0)
         {
-            mediaFileUrl = $"https://test.nihonsaba.net/files/{currentPath.Replace(@"\", "|")}|{requestedFile}";
+            mediaFileUrl = "";
+            StateHasChanged();
+            await Task.Delay(100);
+            mediaFileUrl = $"https://test.nihonsaba.net/files/{currentPath.Replace(@"\", "|")}{requestedFile}";
             await media.ShowAsync();
+        } else
+        {
+            mediaFileUrl = "Index is NULL!";
         }
     }
-
-
 
     private async Task OnShowModalClick()
     {
@@ -263,12 +254,12 @@ else
             .Skip((currentPage - 1) * itemsPerPage)
             .Take(itemsPerPage);
 
-
     protected override async Task OnInitializedAsync()
     {
         breadcrumpParts.Clear();
         LoadFolders();
         LoadFiles();
+        UpdatePagedFilesList();
         await LoadRoles();
     }
 
@@ -311,22 +302,24 @@ else
         {
             currentPath = "";
             breadcrumpParts.Clear();
-        } else if(string.IsNullOrEmpty(source))
+        }
+        else if (string.IsNullOrEmpty(source))
         {
             breadcrumpParts.Add(folder + @"\");
-            currentPath = String.Join("",breadcrumpParts.ToArray());
+            currentPath = String.Join("", breadcrumpParts.ToArray());
         }
         else if (source == "bcnav")
         {
             int i = breadcrumpParts.LastIndexOf(folder);
             breadcrumpParts.RemoveRange(i + 1, breadcrumpParts.Count - (i + 1));
-            currentPath = String.Join("",breadcrumpParts.ToArray());
+            currentPath = String.Join("", breadcrumpParts.ToArray());
         }
 
         folders = FileService.FetchFoldersFromFolder(currentPath);
         files = FileService.FetchFilesFromFolder(currentPath);
 
         UpdateTotalPages();
+        UpdatePagedFilesList();
         currentPage = 1;
         StateHasChanged();
     }
@@ -338,6 +331,7 @@ else
             itemsPerPage = newItemsPerPage;
             currentPage = 1;
             UpdateTotalPages();
+            UpdatePagedFilesList();
             StateHasChanged();
         }
     }
@@ -361,6 +355,7 @@ else
         {
             currentPage--;
         }
+        UpdatePagedFilesList();
     }
 
     private void NextPage()
@@ -369,6 +364,7 @@ else
         {
             currentPage++;
         }
+        UpdatePagedFilesList();
     }
 
     private void OnSearchChanged(ChangeEventArgs e)
