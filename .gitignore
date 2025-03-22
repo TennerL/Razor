@@ -1,4 +1,6 @@
 application.db 
+application.db-shm
+application.db-wal
 .vs
 Razor/bin/
 Razor/obj/
