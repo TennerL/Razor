@@ -6,6 +6,7 @@
 @inject RoleAttributeService RoleAttributeService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManagementService UserManagementService
+@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 @attribute [Authorize]
 
@@ -19,6 +20,13 @@ else if (!files.Any() && !folders.Any())
 }
 else
 {
+    <style>
+        th, td {
+        vertical-align: middle !important;
+        }
+    </style>
+
+
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb" style="display:block; border:var(--bs-border-width) solid var(--bs-border-color); border-radius:10px">
             <button class="btn btn-link" @onclick="@(() => GoToFolder("root","bcnav"))"><span class="bi-house-fill"></span></button>
@@ -34,7 +42,8 @@ else
     <table class="table table-striped" style="margin-top:10px;" @onfocusin="OnHideModalClick">
         <thead>
             <tr>
-                <th>#</th>
+                <th style="width: 40px;">#</th>
+                <th style="width: 60px;"></th> 
                 <th>Dateiname</th>
             </tr>
         </thead>
@@ -45,7 +54,13 @@ else
             @foreach (var item in PagedItems)
             {
                 <tr>
-                    <td>@index</td>
+                    <td style="width: 40px;">@index</td>
+                    <td style="width: 60px;">
+                        @if (!item.IsFolder && IsImage(item.Name)) 
+                        {
+                                        <img src="@WebUrl/@string.Concat(currentPath.Replace(@"\", "|"), "|" + item.Name)" alt="@item.Name" style="width: 50px; height: 50px; object-fit: cover;" />
+                        }
+                    </td>
                     <td>
                         @if (item.IsFolder)
                         {
@@ -58,7 +73,7 @@ else
                         {
                             if (!mediaControlFeature)
                             {
-                                <a href="https://test.nihonsaba.net/files/@string.Concat(currentPath.Replace(@"\","|"),"|"+item.Name)"
+                                <a href="@WebUrl/@string.Concat(currentPath.Replace(@"\", "|"), "|" + item.Name)"
                                 style="text-decoration:none; color:white;">
                                     @item.Name
                                 </a>
@@ -70,14 +85,11 @@ else
                                     @item.Name
                                 </button>
                             }
-                    ;
                         }
                     </td>
                 </tr>
                 index++;
             }
-
-
         </tbody>
     </table>
 
@@ -147,8 +159,6 @@ else
                 <a href="@mediaFileUrl" target="_blank">Datei öffnen</a>
             }
         }
-        @currentMediaIndex
-        @mediaFileUrl
 
     </BodyTemplate>
 </Modal>
@@ -172,8 +182,11 @@ else
     private string role = "";
     private string currentPath = "";
     private string searchTerm = "";
+    private string WebUrl = "";
     private bool mediaControlFeature = false;
     public List<string> pagedFilesList { get; private set; } = new();
+
+
 
     private void UpdatePagedFilesList()
     {
@@ -183,11 +196,18 @@ else
             .ToList();
     }
 
+    private bool IsImage(string fileName)
+    {
+        string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
+        return imageExtensions.Any(ext => fileName.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
+    }
+
+
     private async Task Enter(KeyboardEventArgs e)
     {
         if(e.Code == "Escape")
         {
-            OnHideModalClick();
+            await OnHideModalClick();
         }
 
         if (e.Code == "ArrowRight")
@@ -217,7 +237,7 @@ else
             mediaFileUrl = "";
             StateHasChanged();
             await Task.Delay(100);
-            mediaFileUrl = $"https://test.nihonsaba.net/files/{currentPath.Replace(@"\", "|")}{requestedFile}";
+            mediaFileUrl = $"{WebUrl}/{currentPath.Replace(@"\", "|")}{requestedFile}";
             await media.ShowAsync();
         } else
         {
@@ -259,6 +279,7 @@ else
         LoadFolders();
         LoadFiles();
         UpdatePagedFilesList();
+        WebUrl = NavigationManager.BaseUri + "files";
         await LoadRoles();
     }
 
