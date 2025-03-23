@@ -215,6 +215,7 @@
         currentDataSource = dataSource;
         LoadFolders(dataSource);
         LoadFiles(dataSource);
+        UpdatePagedFilesList();
     }
 
     private void LoadFiles(string dataSource)
@@ -363,7 +364,7 @@
     public async Task LoadRoleAttributes()
     {
         roleAttributes = await RoleAttributeService.GetRoleAttribute(role, "MediaControl");
-        mediaControlFeature = roleAttributes.Value;
+        mediaControlFeature = Convert.ToBoolean(roleAttributes.Value);
     }
 
     private void HandleItemsPerPageChange(ChangeEventArgs e)

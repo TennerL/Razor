@@ -24,7 +24,7 @@ namespace Razor.Components.Services
                 .FirstOrDefaultAsync(a => a.RoleId == roleId && a.Rule == rule);
         }
 
-        public async Task AddRoleAttributes(string roleId, string rule, bool value)
+        public async Task AddRoleAttributes(string roleId, string rule, int value)
         {
             var existingAttribute = await GetRoleAttribute(roleId, rule);
 

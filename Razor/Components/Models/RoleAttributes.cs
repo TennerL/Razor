@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string RoleId { get; set; }
         public string Rule { get; set; }
-        public bool Value { get; set; }
+        public int Value { get; set; }
+
     }
 }

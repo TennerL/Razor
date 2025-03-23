@@ -17,7 +17,9 @@ main {
     height: 3.5rem;
     display: flex;
     align-items: center;
-    background-color: #092565;
+    /*background-color: #092565;*/
+    background-color: rgb(9,37,101,0.5);
+    backdrop-filter: blur(10px);
 }
 
     .top-row ::deep a, .top-row ::deep .btn-link {

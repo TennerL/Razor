@@ -1,0 +1,110 @@
+﻿@page "/upload"
+@using System.Security.Claims
+@inject IWebHostEnvironment env
+@inject DataSourceService DataSourceService
+@inject UserManagementService UserManagementService
+@inject RoleAttributeService RoleAttributeService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@rendermode InteractiveServer
+
+<h3>Upload</h3>
+
+<select class="form-select" style="margin-bottom:10px;" @bind="dataSource">
+    @foreach (var dataSource in dataSources)
+    {
+        <option value="@dataSource.SourcePath">@dataSource.SourcePath</option>
+    }
+</select>
+
+<InputFile OnChange="HandleFileUpload" multiple />
+
+@if (uploadInProgress)
+{
+    <div class="mt-2">
+        <b>Uploading: @progress% </b>
+        <ProgressBar Value="@progress" />
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(uploadMessage))
+{
+    <p>@uploadMessage</p>
+}
+
+@code {
+    private string uploadMessage = "";
+    private RoleAttributes maxSizeAttribute = new();
+    private List<string> roles = new();
+    private string role = "";
+    private List<DataSources> dataSources = new();
+    private string dataSource = "";
+    private int progress = 0;
+    private bool uploadInProgress = false;
+    private int maxSize = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataSources();
+        await LoadRoles();
+        await LoadRoleAttribute();
+    }
+
+    protected async Task LoadRoles()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User.Identity;
+        var userId = authState.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (userId != null)
+        {
+            roles = await UserManagementService.GetRoleOfUserAsync(userId);
+            role = roles.First();
+        }
+        StateHasChanged();
+    }
+
+    private async Task LoadRoleAttribute()
+    {
+        maxSizeAttribute = await RoleAttributeService.GetRoleAttribute(role, "MaxFileSize");
+        maxSize = maxSizeAttribute.Value;
+    }
+
+    private async Task LoadDataSources()
+    {
+        dataSources = await DataSourceService.GetDataSources();
+        dataSource = dataSources.First().SourcePath;
+    }
+
+    private async Task HandleFileUpload(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        long maxFileSize = maxSize * 1024 * 1024; // 500MB
+        if (file.Size > maxFileSize)
+        {
+            uploadMessage = "File is too large!";
+            return;
+        }
+
+        var filePath = Path.Combine(dataSource, file.Name);
+        uploadMessage = "Uploading...";
+        uploadInProgress = true;
+
+        var buffer = new byte[8192]; // 8KB buffer
+        long totalBytes = file.Size;
+        long bytesUploaded = 0;
+
+        await using FileStream fs = new(filePath, FileMode.Create);
+        await using var stream = file.OpenReadStream(maxFileSize);
+
+        int bytesRead;
+        while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+        {
+            await fs.WriteAsync(buffer, 0, bytesRead);
+            bytesUploaded += bytesRead;
+            progress = (int)((bytesUploaded * 100) / totalBytes);
+            StateHasChanged(); // Force UI update
+        }
+
+        uploadInProgress = false;
+        uploadMessage = "Upload Complete!";
+    }
+}
