@@ -20,6 +20,7 @@ builder.Services.AddScoped<FileAccessService>();
 builder.Services.AddScoped<RequestFileService>();
 builder.Services.AddScoped<UserManagementService>();
 builder.Services.AddScoped<RoleAttributeService>();
+builder.Services.AddScoped<DataSourceService>();
 builder.Services.AddSingleton<FileCleanupService>();
 builder.Services.AddHostedService(sp => sp.GetRequiredService<FileCleanupService>());
 builder.Services.AddAuthorizationCore();

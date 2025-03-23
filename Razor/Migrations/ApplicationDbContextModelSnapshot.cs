@@ -208,6 +208,21 @@ namespace Razor.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Razor.Components.Models.DataSources", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SourcePath")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DataSources");
+                });
+
             modelBuilder.Entity("Razor.Components.Models.FileAccessRule", b =>
                 {
                     b.Property<int>("Id")

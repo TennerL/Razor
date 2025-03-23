@@ -1,0 +1,73 @@
+﻿@inject DataSourceService DataSourceService
+@inject ToastService ToastService
+@rendermode InteractiveServer
+
+
+<div class="row" style="padding: var(--bs-modal-padding);">
+    <input style="width:80%" placeholder="Datenquelle" @bind="dataSource" class="form-control" />
+    <button style="width:20%" class="btn btn-outline-primary" @onclick="AddDataSource">Hinzufügen</button>
+</div>
+
+
+    <table class="table table-striped" style="margin-top:10px">
+        <thead>
+            <tr>
+                <th style="text-align:center;">ID</th>
+                <th style="text-align:center;">Datenquelle</th>
+                <th style="text-align:right;">Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+        @if (dataSources.Any())
+        {
+            @foreach (var dataSource in dataSources)
+            {
+                <tr>
+                    <td style="text-align:center;">@dataSource.Id</td>
+                    <td style="text-align:center;">@dataSource.SourcePath</td>
+                    <td style="text-align:right;"><button class="btn btn-outline-danger" @onclick="() => DeleteDataSource(dataSource)">Löschen</button></td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+
+
+@code {
+    string dataSource = "";
+    List<DataSources> dataSources = new();
+
+    private void ShowMessage(ToastType toastType)
+    {
+        ToastService.Notify(new ToastMessage
+            {
+                Type = toastType,
+                Title = "Admin",
+                Message = $"Änderungen gespeichert {DateTime.Now}"
+            });
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataSources();
+    }
+
+    private async Task LoadDataSources()
+    {
+        dataSources = await DataSourceService.GetDataSources();
+    }
+
+    private async Task AddDataSource()
+    {
+        await DataSourceService.AddDataSource(dataSource);
+        await LoadDataSources();
+        ShowMessage(ToastType.Dark);
+    }
+
+    private async Task DeleteDataSource(DataSources dataSource)
+    {
+        await DataSourceService.DeleteDataSource(dataSource);
+        await LoadDataSources();
+        ShowMessage(ToastType.Dark);
+    }
+}

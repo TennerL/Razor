@@ -17,9 +17,11 @@
 <hr />
 
 <div class="row">
-    <div class="col-4">
-        <Button Color="ButtonColor.Secondary" @onclick="OnShowModalClick"><span class="bi-people-fill" /> Nutzerverwaltung </Button>
-        <Button Color="ButtonColor.Secondary" @onclick="OnShowModalClickRoles"><span class="bi-person-fill-gear" /> Rollenverwaltung</Button>
+    <div class="col-10">
+        <Button Color="ButtonColor.Primary" Outline="true" @onclick="() => OpenModal(modal)"><span class="bi-people-fill" /> Nutzerverwaltung </Button>
+        <Button Color="ButtonColor.Primary" Outline="true" @onclick="() => OpenModal(modalRoles)"><span class="bi-person-fill-gear" /> Rollenverwaltung</Button>
+        <Button Color="ButtonColor.Primary" Outline="true" @onclick="() => OpenModal(dataSources)"><span class="bi-hdd-network-fill" /> Datenquellen</Button>
+        <Button Color="ButtonColor.Primary" Outline="true" @onclick="() => OpenModal(customAccessRules)"><span class="bi-file-ruled" /> Erweitert</Button>
     </div>
 </div>
 <hr />
@@ -83,41 +85,52 @@
     </tbody>
 </table>
 
-<h3>Zugriffsregeln</h3>
+<Modal @ref="customAccessRules" Title="Erweiterte Einschränkungen" Size="ModalSize.Large">
+    <BodyTemplate>
+        <div class="row">
+            <input style="width:80%;" @bind="fileName" class="form-control" />
+            <button style="width:15%;" class="btn btn-primary" @onclick="AddRule">Neue Regel</button>
+        </div>
 
-<div class="row" style="gap:50px;">
-    <input style="width:80%;" @bind="fileName" class="form-control" />
-    <button style="width:15%;" class="btn btn-primary" @onclick="AddRule">Neue Regel</button>
-</div>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>Dateiname</th>
+                    <th>Benutzer-ID</th>
+                    <th>Berechtigung</th>
+                    <th>Aktion</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rule in accessRules)
+                {
+                    <tr>
+                        <td>@rule.FilePath</td>
+                        <td>@rule.UserId</td>
+                        <td>@rule.Permission</td>
+                        <td>
+                            <button class="btn btn-danger" @onclick="() => DeleteRule(rule)">Löschen</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </BodyTemplate>
+</Modal>
 
-<table class="table mt-3">
-    <thead>
-        <tr>
-            <th>Dateiname</th>
-            <th>Benutzer-ID</th>
-            <th>Berechtigung</th>
-            <th>Aktion</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var rule in accessRules)
-        {
-            <tr>
-                <td>@rule.FilePath</td>
-                <td>@rule.UserId</td>
-                <td>@rule.Permission</td>
-                <td>
-                    <button class="btn btn-danger" @onclick="() => DeleteRule(rule)">Löschen</button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<Modal @ref="dataSources" Title="Datenquellen" Size="ModalSize.Large">
+    <BodyTemplate>
+        <DataSrc /> 
+    </BodyTemplate>
+</Modal>
+
 
 @code {
 
     private Modal modal = default!;
     private Modal modalRoles = default!;
+    private Modal customAccessRules = default!;
+    private Modal dataSources = default!;
 
     private void ShowMessage(ToastType toastType)
     {
@@ -129,14 +142,15 @@
             });
     }
 
-    private async Task OnShowModalClick()
+    private async Task OpenModal(Modal modal)
     {
         if (modal != null)
         {
             await modal.ShowAsync();
         }
     }
-    private async Task OnHideModalClick()
+
+    private async Task CloseModal(Modal modal)
     {
         if (modal != null)
         {
@@ -144,21 +158,6 @@
         }
     }
 
-    public async Task OnShowModalClickRoles()
-    {
-        if (modalRoles != null)
-        {
-            await modalRoles.ShowAsync();
-        }  
-    }
-
-    public async Task OnHideModalClickRoles()
-    {
-        if (modalRoles != null)
-        {
-            await modalRoles.HideAsync();
-        }
-    }
 
     string fileName = "";
     List<FileAccessRule> accessRules = new();

@@ -6,9 +6,9 @@ using System.Linq;
 public class FileService
 {
 
-        private string _directoryPath = @"\\WIN-QQ32S3B1B3S\t\";
+        //private string _directoryPath = @"\\WIN-QQ32S3B1B3S\t\";
 
-        public List<string> GetFiles()
+        public List<string> GetFiles(string _directoryPath)
         {
             if(!Directory.Exists(_directoryPath))
             {
@@ -22,7 +22,7 @@ public class FileService
             return filesAndDirs;
         }
 
-        public List<string> GetFolders()
+        public List<string> GetFolders(string _directoryPath)
         {
             if (!Directory.Exists(_directoryPath))
             {
@@ -36,7 +36,7 @@ public class FileService
             return folders;
         }
 
-        public List<string> FetchFilesFromFolder(string file)
+        public List<string> FetchFilesFromFolder(string file, string _directoryPath)
         {
             var requestedPath = string.Concat(_directoryPath, file);
             if(!Directory.Exists(requestedPath))
@@ -51,7 +51,7 @@ public class FileService
             return filesAndDirs;
         }
 
-        public List<string> FetchFoldersFromFolder(string file)
+        public List<string> FetchFoldersFromFolder(string file, string _directoryPath)
         {
             var requestedPath = string.Concat(_directoryPath, file);
             if (!Directory.Exists(requestedPath))

@@ -1,70 +1,76 @@
 @page "/filelist"
 @using BlazorBootstrap;
 @using System.Security.Claims
-@inject IJSRuntime JS
 @inject FileService FileService
 @inject RoleAttributeService RoleAttributeService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManagementService UserManagementService
+@inject DataSourceService DataSourceService
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 @attribute [Authorize]
 
-@if (files == null && folders == null)
-{
-    <p>Lade Dateien...</p>
-}
-else if (!files.Any() && !folders.Any())
-{
-    <p>Keine Dateien gefunden.</p>
-}
-else
-{
-    <style>
-        th, td {
+<style>
+    th, td {
         vertical-align: middle !important;
+    }
+</style>
+
+<select class="form-select" style="margin-bottom:10px;" @onchange="async (e) => await LoadAll(e.Value?.ToString())">
+    @foreach (var dataSource in dataSources)
+    {
+        <option value="@dataSource.SourcePath">@dataSource.SourcePath</option>
+    }
+</select>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="display:block; border:var(--bs-border-width) solid var(--bs-border-color); border-radius:10px">
+        <button class="btn btn-link" @onclick="@(() => GoToFolder("root","bcnav", currentDataSource))"><span class="bi-house-fill"></span></button>
+        @foreach (var breadcrump in breadcrumpParts)
+        {
+            <button class="btn btn-link" style="color:white; text-decoration:none;" @onclick="@(() => GoToFolder(breadcrump, "bcnav", currentDataSource))">@breadcrump</button>
         }
-    </style>
+    </ol>
+</nav>
 
+<input class="form-control" placeholder="Suche" @bind="searchTerm" @oninput="OnSearchChanged" />
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb" style="display:block; border:var(--bs-border-width) solid var(--bs-border-color); border-radius:10px">
-            <button class="btn btn-link" @onclick="@(() => GoToFolder("root","bcnav"))"><span class="bi-house-fill"></span></button>
-            @foreach (var breadcrump in breadcrumpParts)
-            {
-                <button class="btn btn-link" style="color:white; text-decoration:none;" @onclick="@(() => GoToFolder(breadcrump, "bcnav"))">@breadcrump</button>
-            }
-        </ol>
-    </nav>
+<table class="table table-striped" style="margin-top:10px;" @onfocusin="OnHideModalClick">
+    <thead>
+        <tr>
+            <th style="width: 40px;">#</th>
+            <th style="width: 60px;"></th>
+            <th>Dateiname</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (files == null && folders == null)
+        {
+            <p>Lade Dateien...</p>
+        }
+        else if (!files.Any() && !folders.Any())
+        {
+            <p>Keine Dateien gefunden.</p>
+        }
+        else
+        {
 
-    <input class="form-control" placeholder="Suche" @bind="searchTerm" @oninput="OnSearchChanged" />
+            int index = (currentPage - 1) * itemsPerPage + 1;
 
-    <table class="table table-striped" style="margin-top:10px;" @onfocusin="OnHideModalClick">
-        <thead>
-            <tr>
-                <th style="width: 40px;">#</th>
-                <th style="width: 60px;"></th> 
-                <th>Dateiname</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int index = (currentPage - 1) * itemsPerPage + 1;
-            }
             @foreach (var item in PagedItems)
             {
                 <tr>
                     <td style="width: 40px;">@index</td>
                     <td style="width: 60px;">
-                        @if (!item.IsFolder && IsImage(item.Name)) 
+                        @if (!item.IsFolder && IsImage(item.Name))
                         {
-                                        <img src="@WebUrl/@string.Concat(currentPath.Replace(@"\", "|"), "|" + item.Name)" alt="@item.Name" style="width: 50px; height: 50px; object-fit: cover;" />
+                            <img src="@WebUrl/@currentDataSource.Replace(@"\","|")/@string.Concat(currentPath.Replace(@"\", "|") + item.Name)" alt="@item.Name" style="width: 50px; height: 50px; object-fit: cover;" />
                         }
                     </td>
                     <td>
                         @if (item.IsFolder)
                         {
-                            <button class="btn btn-link" @onclick="@(() => GoToFolder(item.Name, ""))"
+                            <button class="btn btn-link" @onclick="@(() => GoToFolder(item.Name, "", currentDataSource))"
                             style="text-decoration:none; color:white; margin: 0; padding: 0;">
                                 [Dir] @item.Name
                             </button>
@@ -73,14 +79,14 @@ else
                         {
                             if (!mediaControlFeature)
                             {
-                                <a href="@WebUrl/@string.Concat(currentPath.Replace(@"\", "|"), "|" + item.Name)"
+                                <a href="@WebUrl/@currentDataSource.Replace(@"\","|")/@string.Concat(currentPath.Replace(@"\", "|"), "|" + item.Name)"
                                 style="text-decoration:none; color:white;">
                                     @item.Name
                                 </a>
                             }
                             else
                             {
-                                <button class="btn btn-link" @onclick="() => GetFileStream(currentPath, item.Name)"
+                                <button class="btn btn-link" @onclick="@(() => GetFileStream(currentPath.Replace(@"\", "|"), item.Name))"
                                 style="text-decoration:none; color:white; margin: 0; padding: 0;">
                                     @item.Name
                                 </button>
@@ -90,36 +96,37 @@ else
                 </tr>
                 index++;
             }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
 
-    <div class="row" style="margin-bottom:50px">
-        <div class="col-sm-4" style="display:block ruby; gap:10px;">
+<div class="row" style="margin-bottom:50px">
+    <div class="col-sm-4" style="display:block ruby; gap:10px;">
 
-            <span>Anzeige #</span>
+        <span>Anzeige #</span>
 
-            <select class="form-control" style="width:50px;" @onchange="HandleItemsPerPageChange">
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="1000">1000</option>
-            </select>
+        <select class="form-control" style="width:50px;" @onchange="HandleItemsPerPageChange">
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="1000">1000</option>
+        </select>
 
-            <button class="btn btn-primary" @onclick="PreviousPage" disabled="@(currentPage == 1)">
-                Zurück
-            </button>
+        <button class="btn btn-primary" @onclick="PreviousPage" disabled="@(currentPage == 1)">
+            Zurück
+        </button>
 
-            <span>Seite @currentPage von @totalPages</span>
+        <span>Seite @currentPage von @totalPages</span>
 
-            <button class="btn btn-primary" @onclick="NextPage" disabled="@(currentPage == totalPages)">
-                Weiter
-            </button>
-        </div>
-        <div class="col-sm-8" style="text-align:end;">
-            <p>Gesamt: @totalCount</p>
-        </div>
+        <button class="btn btn-primary" @onclick="NextPage" disabled="@(currentPage == totalPages)">
+            Weiter
+        </button>
     </div>
-}
+    <div class="col-sm-8" style="text-align:end;">
+        <p>Gesamt: @totalCount</p>
+    </div>
+</div>
+
 
 
 <Modal @ref="media" Title="Medienanzeige" UseStaticBackdrop="true" OnHidePrevented="OnHideModalClick" Size="ModalSize.Large" @onkeydown="@Enter">
@@ -170,6 +177,7 @@ else
     private string mediaFileUrl = "";
     private int currentMediaIndex = 0;
 
+    private List<DataSources> dataSources = new();
     private List<string> files = new();
     private List<string> folders = new();
     private List<string> breadcrumpParts = new();
@@ -183,10 +191,72 @@ else
     private string currentPath = "";
     private string searchTerm = "";
     private string WebUrl = "";
+    private string currentDataSource = "";
     private bool mediaControlFeature = false;
     public List<string> pagedFilesList { get; private set; } = new();
 
+    protected override async Task OnInitializedAsync()
+    {
+        breadcrumpParts.Clear();
+        await LoadDataSources();
+        await LoadAll(dataSources.First().SourcePath);
+        UpdatePagedFilesList();
+        WebUrl = NavigationManager.BaseUri + "files";
+        await LoadRoles();
+    }
 
+    private async Task LoadDataSources()
+    {
+        dataSources = await DataSourceService.GetDataSources();
+    }
+
+    private async Task LoadAll(string dataSource)
+    {
+        currentDataSource = dataSource;
+        LoadFolders(dataSource);
+        LoadFiles(dataSource);
+    }
+
+    private void LoadFiles(string dataSource)
+    {
+        files = FileService.GetFiles(dataSource);
+        UpdateTotalPages();
+        currentPage = 1;
+    }
+    private void LoadFolders(string dataSource)
+    {
+        folders = FileService.GetFolders(dataSource);
+        UpdateTotalPages();
+        currentPage = 1;
+    }
+
+    private void GoToFolder(string folder, string source, string currentDataSource)
+    {
+        if (folder == "root" && source == "bcnav")
+        {
+            currentPath = "";
+            breadcrumpParts.Clear();
+        }
+        else if (string.IsNullOrEmpty(source))
+        {
+            breadcrumpParts.Add(folder + @"\");
+            currentPath = String.Join("", breadcrumpParts.ToArray());
+        }
+        else if (source == "bcnav")
+        {
+            int i = breadcrumpParts.LastIndexOf(folder);
+            breadcrumpParts.RemoveRange(i + 1, breadcrumpParts.Count - (i + 1));
+            currentPath = String.Join("", breadcrumpParts.ToArray());
+        }
+
+        folders = FileService.FetchFoldersFromFolder(currentPath, currentDataSource);
+        files = FileService.FetchFilesFromFolder(currentPath, currentDataSource);
+
+        UpdateTotalPages();
+        UpdatePagedFilesList();
+        currentPage = 1;
+        StateHasChanged();
+    }
 
     private void UpdatePagedFilesList()
     {
@@ -205,7 +275,7 @@ else
 
     private async Task Enter(KeyboardEventArgs e)
     {
-        if(e.Code == "Escape")
+        if (e.Code == "Escape")
         {
             await OnHideModalClick();
         }
@@ -237,9 +307,10 @@ else
             mediaFileUrl = "";
             StateHasChanged();
             await Task.Delay(100);
-            mediaFileUrl = $"{WebUrl}/{currentPath.Replace(@"\", "|")}{requestedFile}";
+            mediaFileUrl = $"{WebUrl}/{currentDataSource.Replace(@"\","|")}/{currentPath.Replace(@"\", "|")}{requestedFile}";
             await media.ShowAsync();
-        } else
+        }
+        else
         {
             mediaFileUrl = "Index is NULL!";
         }
@@ -273,15 +344,7 @@ else
             .Skip((currentPage - 1) * itemsPerPage)
             .Take(itemsPerPage);
 
-    protected override async Task OnInitializedAsync()
-    {
-        breadcrumpParts.Clear();
-        LoadFolders();
-        LoadFiles();
-        UpdatePagedFilesList();
-        WebUrl = NavigationManager.BaseUri + "files";
-        await LoadRoles();
-    }
+
 
     protected async Task LoadRoles()
     {
@@ -301,47 +364,6 @@ else
     {
         roleAttributes = await RoleAttributeService.GetRoleAttribute(role, "MediaControl");
         mediaControlFeature = roleAttributes.Value;
-    }
-
-    private void LoadFiles()
-    {
-        files = FileService.GetFiles();
-        UpdateTotalPages();
-        currentPage = 1;
-    }
-    private void LoadFolders()
-    {
-        folders = FileService.GetFolders();
-        UpdateTotalPages();
-        currentPage = 1;
-    }
-
-    private void GoToFolder(string folder, string source)
-    {
-        if (folder == "root" && source == "bcnav")
-        {
-            currentPath = "";
-            breadcrumpParts.Clear();
-        }
-        else if (string.IsNullOrEmpty(source))
-        {
-            breadcrumpParts.Add(folder + @"\");
-            currentPath = String.Join("", breadcrumpParts.ToArray());
-        }
-        else if (source == "bcnav")
-        {
-            int i = breadcrumpParts.LastIndexOf(folder);
-            breadcrumpParts.RemoveRange(i + 1, breadcrumpParts.Count - (i + 1));
-            currentPath = String.Join("", breadcrumpParts.ToArray());
-        }
-
-        folders = FileService.FetchFoldersFromFolder(currentPath);
-        files = FileService.FetchFilesFromFolder(currentPath);
-
-        UpdateTotalPages();
-        UpdatePagedFilesList();
-        currentPage = 1;
-        StateHasChanged();
     }
 
     private void HandleItemsPerPageChange(ChangeEventArgs e)

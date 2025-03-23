@@ -1,4 +1,4 @@
-﻿@page "/files/{RequestedFile}"
+﻿@page "/files/{DataSource}/{RequestedFile}"
 @using System.Security.Claims
 @inject NavigationManager Navigation
 @inject FileAccessService FileAccessService
@@ -76,19 +76,22 @@
 
         if (hasPermission)
         {
-            await RequestFileService.GetFile(RequestedFile);
+            await RequestFileService.GetFile(RequestedFile, DataSource.Replace("|",@"\"));
             Navigation.NavigateTo("/req/" + reqFile);
         } else if (isAdmin)
         {
 
-            await RequestFileService.GetFile(RequestedFile);
+            await RequestFileService.GetFile(RequestedFile, DataSource.Replace("|",@"\"));
             Navigation.NavigateTo("/req/" + reqFile);
         }
     }
 
 
     [Parameter]
-    public string RequestedFile { get; set; }
+    public required string DataSource { get; set; }
+    [Parameter]
+    public required string RequestedFile { get; set; }
+
 
 }
 

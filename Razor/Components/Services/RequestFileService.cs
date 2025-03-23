@@ -1,12 +1,6 @@
 namespace Razor.Components.Services
 {
     using System.IO;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Microsoft.VisualBasic;
-    using Microsoft.AspNetCore.Components;
-
-
 
     public class RequestFileService
     {
@@ -16,9 +10,9 @@ namespace Razor.Components.Services
             _cleanupService = cleanupService;
         }
         private readonly string _localFileDir = AppDomain.CurrentDomain.BaseDirectory + @"\req\";
-        private readonly string _FilePath = @"\\WIN-QQ32S3B1B3S\t\";
+        //private readonly string _FilePath = @"\\WIN-QQ32S3B1B3S\t\";
 
-        public async Task GetFile(string RequestedFile)
+        public async Task GetFile(string RequestedFile, string _FilePath)
         {
             var destinationFile = "";
             int lastIndex = RequestedFile.LastIndexOf("|");
@@ -43,7 +37,7 @@ namespace Razor.Components.Services
         }
    
 
-        public async Task<Stream> GetStreamAsync(string requestedFile)
+        public async Task<Stream> GetStreamAsync(string requestedFile, string _FilePath)
         {
             int lastIndex = requestedFile.LastIndexOf("|");
             if (lastIndex != -1)

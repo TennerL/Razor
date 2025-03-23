@@ -4,8 +4,6 @@
 @using BlazorBootstrap;
 @rendermode InteractiveServer
 
-<h3>Rolenverwaltung</h3>
-
 <select class="form-select" @onchange="async (e) => await OnChangedRole(e.Value?.ToString())">
     <option value="">Auswahl</option>
     @foreach(var role in roles)
