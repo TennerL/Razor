@@ -8,11 +8,11 @@ It also comes with built-in user management features, role management and enable
 
 For future development I'd like to add:
 
-- Multimedia features e.g. embedded Image and video viewing, maybe thumbnails 
+- Multimedia features e.g. embedded Image and video viewing, maybe thumbnails ✓
+
+- Multiple remote sources ✓
 
 - Option to upload files 
-
-- Destinction between userdirectorys. As it is, it only supports one remote source 
 
 - Making file fetching even more secure with an generated "access token" or some sort like that 
 
