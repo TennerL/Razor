@@ -15,7 +15,7 @@ For future development I'd like to add:
 
 - Option to upload files ✓
 
-- Making file fetching even more secure with an generated "access token" or some sort like that 
+- Option to share specific files to non authenticated users / entitys
 
 - Maybe later adding Nextcloud-like features  
 
