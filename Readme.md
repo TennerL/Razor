@@ -28,3 +28,11 @@ To Initialize the Database:
 >dotnet ef migrations add Initial
 
 >dotnet ef database update
+
+
+
+Q&A 
+
+Q Will it be possible to delete or move files on the set locations?
+
+A As the main focus is security, it might become available on specific locations.
