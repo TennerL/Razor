@@ -33,6 +33,6 @@ To Initialize the Database:
 
 Q&A 
 
-Q Will it be possible to delete or move files on the set locations?
+Q: Will it be possible to delete or move files on the set locations?
 
-A As the main focus is security, it might become available on specific locations.
+A: As the main focus is security, it might become available on specific locations.
