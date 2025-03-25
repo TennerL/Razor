@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Razor.Components.Services;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,7 @@ builder.Services.AddBlazorBootstrap();
 
 builder.Services.Configure<FormOptions>(options =>
 {
-    options.MultipartBodyLengthLimit = 50L * 1024 * 1024 * 1024; // 50GB
+    options.MultipartBodyLengthLimit = 50L * 1024 * 1024 * 1024; 
 });
 
 
@@ -43,13 +44,6 @@ using (var scope = app.Services.CreateScope())
     await RoleInitializerService.InitializeRoles(services);
 }
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "req")),
-    RequestPath = "/req"
-});
-
-
 
 if (!app.Environment.IsDevelopment())
 {
@@ -60,6 +54,32 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+
+var protectedPath = Path.Combine(app.Environment.ContentRootPath, "req");
+
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/req"))
+    {
+        var user = context.User;
+        if (user?.Identity?.IsAuthenticated != true)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return;
+        }
+    }
+    await next();
+});
+
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "req")),
+    RequestPath = "/req"
+});
+
+
 
 
 app.UseAntiforgery();
