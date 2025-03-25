@@ -1,6 +1,7 @@
-Playground for myself to get into Blazor programming! This might become a usefull repo later on.
 
-Im deploying the app with VS 2022 directly to my IIS Webserver 
+
+![alt text](/screenshot.JPG)
+
 
 
 The application as it is provides safe and efficient directory browsing and file fetching from an external source.
@@ -12,7 +13,7 @@ For future development I'd like to add:
 
 - Multiple remote sources ✓
 
-- Option to upload files 
+- Option to upload files ✓
 
 - Making file fetching even more secure with an generated "access token" or some sort like that 
 
