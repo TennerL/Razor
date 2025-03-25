@@ -17,7 +17,9 @@ For future development I'd like to add:
 
 - Option to share specific files to non authenticated users / entitys
 
-- Maybe later adding Nextcloud-like features  
+- Maybe later adding Nextcloud-like features
+
+- English localization 
 
 
 
