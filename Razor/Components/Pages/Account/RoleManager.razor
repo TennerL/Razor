@@ -73,7 +73,7 @@
             maxFileSize = maxSizeAttribute.Value;
         } else
         {
-            ChangeFilesizeLimit();
+            await ChangeFilesizeLimit();
         }
         IsMediaControlEnabled = Convert.ToBoolean(roleAttribute?.Value) == true;
     }

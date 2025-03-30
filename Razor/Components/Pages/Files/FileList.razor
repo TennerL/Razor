@@ -41,6 +41,8 @@
             <th style="width: 40px;">#</th>
             <th style="width: 60px;"></th>
             <th>Dateiname</th>
+            <th>Dateigröße</th>
+            <th>Datum</th>
         </tr>
     </thead>
     <tbody>
@@ -93,6 +95,8 @@
                             }
                         }
                     </td>
+                    <td>@(item.IsFolder ? "-" : item.FileInfo?.Size.ToString() ?? "-")</td>
+                    <td>@(item.IsFolder ? "-" : item.FileInfo?.Date.ToString("dd.MM.yyyy HH:mm") ?? "-")</td>
                 </tr>
                 index++;
             }
@@ -136,7 +140,7 @@
         {
             @if (mediaFileUrl.EndsWith(".mp4") || mediaFileUrl.EndsWith(".webm") || mediaFileUrl.EndsWith(".mkv"))
             {
-                <video controls width="100%" autoplay tabindex="-1">
+                <video controls autoplay tabindex="-1">
                     <source src="@mediaFileUrl" type="video/mp4">
                     <source src="@mediaFileUrl" type="video/webm">
                     <source src="@mediaFileUrl" type="video/x-matroska">
@@ -158,7 +162,7 @@
             }
             else if (mediaFileUrl.EndsWith(".pdf"))
             {
-                <iframe src="@mediaFileUrl" width="100%" height="500px"></iframe>
+                <iframe src="@mediaFileUrl" ></iframe>
             }
             else
             {
@@ -178,7 +182,7 @@
     private int currentMediaIndex = 0;
 
     private List<DataSources> dataSources = new();
-    private List<string> files = new();
+    private List<FileData> files = new();
     private List<string> folders = new();
     private List<string> breadcrumpParts = new();
     private List<string> roles = new();
@@ -332,19 +336,25 @@
             await media.HideAsync();
         }
     }
-
-    private IEnumerable<(string Name, bool IsFolder)> PagedItems =>
+    private IEnumerable<(string Name, bool IsFolder, FileData? FileInfo)> PagedItems =>
         folders
             .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-            .Select(f => (f, true))
+            .Select(f => (f, true, (FileData?)null)) 
             .Concat(
                 files
-                    .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                    .Select(f => (f, false))
+                    .Where(f => string.IsNullOrEmpty(searchTerm) || f.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    .Select(f => (f.Name, false, f)) 
             )
             .Skip((currentPage - 1) * itemsPerPage)
             .Take(itemsPerPage);
 
+    private string FormatFileSize(long bytes)
+    {
+        if (bytes < 1024) return $"{bytes} B";
+        if (bytes < 1024 * 1024) return $"{bytes / 1024.0:F1} KB";
+        if (bytes < 1024 * 1024 * 1024) return $"{bytes / 1024.0 / 1024.0:F1} MB";
+        return $"{bytes / 1024.0 / 1024.0 / 1024.0:F1} GB";
+    }
 
 
     protected async Task LoadRoles()
@@ -382,7 +392,7 @@
     private void UpdateTotalPages()
     {
         int totalItems = folders.Count(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) +
-                         files.Count(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+                         files.Count(f => string.IsNullOrEmpty(searchTerm) || f.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
 
         totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
         if (totalPages == 0) totalPages = 1;

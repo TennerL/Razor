@@ -10,7 +10,6 @@ namespace Razor.Components.Services
             _cleanupService = cleanupService;
         }
         private readonly string _localFileDir = AppDomain.CurrentDomain.BaseDirectory + @"\req\";
-        //private readonly string _FilePath = @"\\WIN-QQ32S3B1B3S\t\";
 
         public async Task GetFile(string RequestedFile, string _FilePath)
         {
