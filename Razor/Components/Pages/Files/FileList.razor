@@ -28,7 +28,7 @@
         <button class="btn btn-link" @onclick="@(() => GoToFolder("root","bcnav", currentDataSource))"><span class="bi-house-fill"></span></button>
         @foreach (var breadcrump in breadcrumpParts)
         {
-            <button class="btn btn-link" style="color:white; text-decoration:none;" @onclick="@(() => GoToFolder(breadcrump, "bcnav", currentDataSource))">@breadcrump</button>
+            <button class="btn btn-link" style="color:white; text-decoration:none;" @onclick="@(() => GoToFolder(breadcrump, "bcnav", currentDataSource))">@breadcrump.Replace(@"\","")</button>
         }
     </ol>
 </nav>
@@ -95,7 +95,7 @@
                             }
                         }
                     </td>
-                    <td>@(item.IsFolder ? "" : FormatFileSize(item.FileInfo.Size) ?? "")</td>
+                    <td>@(item.IsFolder ? "" : FormatFileSize(item.FileInfo?.Size) ?? "")</td>
                     <td>@(item.IsFolder ? "" : item.FileInfo?.Date.ToString("dd.MM.yyyy HH:mm") ?? "")</td>
                 </tr>
                 index++;
@@ -131,8 +131,6 @@
     </div>
 </div>
 
-
-
 <Modal @ref="media" Title="Medienanzeige" UseStaticBackdrop="true" OnHidePrevented="OnHideModalClick" Size="ModalSize.Large" @onkeydown="@Enter">
     <BodyTemplate>
         <div class="form-check form-switch mb-2" style="display:flex;">
@@ -164,7 +162,7 @@
             }
             else if (mediaFileUrl.EndsWith(".pdf"))
             {
-                <iframe src="@mediaFileUrl" ></iframe>
+                <iframe style="width:100%;height:100%;" src="@mediaFileUrl" ></iframe>
             }
             else
             {
@@ -175,8 +173,6 @@
 
     </BodyTemplate>
 </Modal>
-
-
 
 @code {
     private Modal media = default!;
@@ -361,7 +357,7 @@
             .Skip((currentPage - 1) * itemsPerPage)
             .Take(itemsPerPage);
 
-    private string FormatFileSize(long bytes)
+    private string FormatFileSize(long? bytes)
     {
         if (bytes < 1024) return $"{bytes} B";
         if (bytes < 1024 * 1024) return $"{bytes / 1024.0:F1} KB";
