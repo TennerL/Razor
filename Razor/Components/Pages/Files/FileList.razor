@@ -16,7 +16,7 @@
     }
 </style>
 
-<select class="form-select" style="margin-bottom:10px;" @onchange="async (e) => await LoadAll(e.Value?.ToString())">
+<select class="form-select" style="margin-bottom:10px;" @onchange="async (e) => LoadAll(e.Value?.ToString())">
     @foreach (var dataSource in dataSources)
     {
         <option value="@dataSource.SourcePath">@dataSource.SourcePath</option>
@@ -95,8 +95,8 @@
                             }
                         }
                     </td>
-                    <td>@(item.IsFolder ? "-" : item.FileInfo?.Size.ToString() ?? "-")</td>
-                    <td>@(item.IsFolder ? "-" : item.FileInfo?.Date.ToString("dd.MM.yyyy HH:mm") ?? "-")</td>
+                    <td>@(item.IsFolder ? "" : FormatFileSize(item.FileInfo.Size) ?? "")</td>
+                    <td>@(item.IsFolder ? "" : item.FileInfo?.Date.ToString("dd.MM.yyyy HH:mm") ?? "")</td>
                 </tr>
                 index++;
             }
@@ -135,12 +135,14 @@
 
 <Modal @ref="media" Title="Medienanzeige" UseStaticBackdrop="true" OnHidePrevented="OnHideModalClick" Size="ModalSize.Large" @onkeydown="@Enter">
     <BodyTemplate>
-
+        <div class="form-check form-switch mb-2" style="display:flex;">
+            <input class="form-check-input" type="checkbox" role="switch" id="autoplaySwitch" style="margin: auto; margin-right: 0;" @bind ="autoplayEnabled" />
+        </div>
         @if (!string.IsNullOrEmpty(mediaFileUrl))
         {
             @if (mediaFileUrl.EndsWith(".mp4") || mediaFileUrl.EndsWith(".webm") || mediaFileUrl.EndsWith(".mkv"))
             {
-                <video controls autoplay tabindex="-1">
+                <video controls autoplay width="100%" tabindex="-1" @onended="HandleMediaEnded">
                     <source src="@mediaFileUrl" type="video/mp4">
                     <source src="@mediaFileUrl" type="video/webm">
                     <source src="@mediaFileUrl" type="video/x-matroska">
@@ -180,13 +182,14 @@
     private Modal media = default!;
     private string mediaFileUrl = "";
     private int currentMediaIndex = 0;
+    private bool autoplayEnabled = false;
 
     private List<DataSources> dataSources = new();
     private List<FileData> files = new();
     private List<string> folders = new();
     private List<string> breadcrumpParts = new();
     private List<string> roles = new();
-    private RoleAttributes roleAttributes = new();
+    private RoleAttributes? roleAttributes;
     private int totalCount = 0;
     private int currentPage = 1;
     private int itemsPerPage = 25;
@@ -202,11 +205,20 @@
     protected override async Task OnInitializedAsync()
     {
         breadcrumpParts.Clear();
-        await LoadDataSources();
-        await LoadAll(dataSources.First().SourcePath);
         UpdatePagedFilesList();
         WebUrl = NavigationManager.BaseUri + "files";
+        await LoadDataSources();
+        LoadAll(dataSources.First().SourcePath);
         await LoadRoles();
+    }
+
+    private async Task HandleMediaEnded()
+    {
+        if (autoplayEnabled && currentMediaIndex < pagedFilesList.Count - 1)
+        {
+            currentMediaIndex++;
+            await GetFileStream(currentPath, pagedFilesList[currentMediaIndex]);
+        }
     }
 
     private async Task LoadDataSources()
@@ -214,7 +226,7 @@
         dataSources = await DataSourceService.GetDataSources();
     }
 
-    private async Task LoadAll(string dataSource)
+    private void LoadAll(string dataSource)
     {
         currentDataSource = dataSource;
         LoadFolders(dataSource);
@@ -336,14 +348,15 @@
             await media.HideAsync();
         }
     }
-    private IEnumerable<(string Name, bool IsFolder, FileData? FileInfo)> PagedItems =>
+
+    private IEnumerable<(string Name, bool IsFolder, FileData FileInfo)> PagedItems =>
         folders
             .Where(f => string.IsNullOrEmpty(searchTerm) || f.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-            .Select(f => (f, true, (FileData?)null)) 
+            .Select(f => (f, true, new FileData { Name = f })) 
             .Concat(
                 files
                     .Where(f => string.IsNullOrEmpty(searchTerm) || f.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                    .Select(f => (f.Name, false, f)) 
+                    .Select(f => (f.Name, false, f))
             )
             .Skip((currentPage - 1) * itemsPerPage)
             .Take(itemsPerPage);
@@ -374,7 +387,7 @@
     public async Task LoadRoleAttributes()
     {
         roleAttributes = await RoleAttributeService.GetRoleAttribute(role, "MediaControl");
-        mediaControlFeature = Convert.ToBoolean(roleAttributes.Value);
+        mediaControlFeature = Convert.ToBoolean(roleAttributes?.Value);
     }
 
     private void HandleItemsPerPageChange(ChangeEventArgs e)

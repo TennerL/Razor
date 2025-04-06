@@ -31,8 +31,8 @@
 @code {
 
     List<RoleDto> roles = new();
-    RoleAttributes roleAttribute = new();
-    RoleAttributes maxSizeAttribute = new();
+    RoleAttributes? roleAttribute;
+    RoleAttributes? maxSizeAttribute;
     List<UserDto> users = new();
     int maxFileSize = 0;
     string selectedId = "";

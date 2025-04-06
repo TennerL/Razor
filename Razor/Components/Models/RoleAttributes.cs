@@ -3,8 +3,8 @@
     public class RoleAttributes
     {
         public int Id { get; set; }
-        public string RoleId { get; set; }
-        public string Rule { get; set; }
+        public required string RoleId { get; set; }
+        public required string Rule { get; set; }
         public int Value { get; set; }
 
     }

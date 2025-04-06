@@ -6,8 +6,6 @@ using System.Linq;
 public class FileService
 {
 
-        //private string _directoryPath = @"\\WIN-QQ32S3B1B3S\t\";
-
         public List<FileData> GetFiles(string _directoryPath)
         {
             if(!Directory.Exists(_directoryPath))
@@ -25,13 +23,6 @@ public class FileService
                 })
                 .OrderByDescending(file => file.Date)
                 .ToList();
-            
-            //var filesAndDirs = new List<string>();
-
-            //var files = Directory.GetFiles(_directoryPath).Select(Path.GetFileName).ToList();
-            //filesAndDirs.AddRange(files);
-
-            //return filesAndDirs;
         }
 
         public List<string> GetFolders(string _directoryPath)
