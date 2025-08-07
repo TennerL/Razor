@@ -20,6 +20,10 @@
             <div id="mediaControl" class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" checked="@IsMediaControlEnabled" id="switchMediaControl" @onchange="OnMediaControlChanged" />
             </div>
+            <label for="thumbControl">Thumbnails: </label>
+            <div id="thumbControl" class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" checked="@IsThumbnailEnabled" id="switchThumbnailControl" @onchange="OnThumbnailControlChanged" />
+            </div>
             <label for="maxFilesize">Max. Upload (MB)</label>
             <input id="maxFilesize" class="form-control" type="number" value="@maxFileSize" @onchange="(e) => { maxFileSize = Convert.ToInt32(e.Value); ChangeFilesizeLimit(); }" /> 
         </div>
@@ -33,10 +37,12 @@
     List<RoleDto> roles = new();
     RoleAttributes? roleAttribute;
     RoleAttributes? maxSizeAttribute;
+    RoleAttributes? thumbnailAttribute;
     List<UserDto> users = new();
     int maxFileSize = 0;
     string selectedId = "";
     private bool IsMediaControlEnabled = false;
+    private bool IsThumbnailEnabled = false; 
 
     private void ShowMessage(ToastType toastType)
     {
@@ -52,8 +58,14 @@
     private async Task OnMediaControlChanged(ChangeEventArgs e)
     {
         IsMediaControlEnabled = (bool)Convert.ToBoolean(e.Value);
-        await AddRoleAttributes(IsMediaControlEnabled);
+        await AddRoleAttributes(IsMediaControlEnabled, "MediaControl");
     }
+    private async Task OnThumbnailControlChanged(ChangeEventArgs e)
+    {
+        IsThumbnailEnabled = e.Value?.ToString()?.ToLower() == "true";
+        await AddRoleAttributes(IsThumbnailEnabled, "Thumbnails");
+    }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -65,18 +77,49 @@
         roles = await UserManagementService.GetRoles();
     }
 
+    // private async Task LoadRoleAttributes()
+    // {
+    //     roleAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "MediaControl");
+    //     thumbnailAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "Thumbnails");
+    //     IsThumbnailEnabled = Convert.ToBoolean(thumbnailAttribute?.Value) == true;
+
+    //     maxSizeAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "MaxFileSize");
+    //     if(maxSizeAttribute != null){
+    //         maxFileSize = maxSizeAttribute.Value;
+    //     } else
+    //     {
+    //         await ChangeFilesizeLimit();
+    //     }
+    //     IsMediaControlEnabled = Convert.ToBoolean(roleAttribute?.Value) == true;
+    // }
+
     private async Task LoadRoleAttributes()
+{
+    try
     {
         roleAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "MediaControl");
+        thumbnailAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "Thumbnails");
         maxSizeAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "MaxFileSize");
-        if(maxSizeAttribute != null){
+
+        IsMediaControlEnabled = Convert.ToBoolean(roleAttribute?.Value ?? 0);
+        IsThumbnailEnabled = Convert.ToBoolean(thumbnailAttribute?.Value ?? 0);
+
+        if (maxSizeAttribute != null)
+        {
             maxFileSize = maxSizeAttribute.Value;
-        } else
+        }
+        else
         {
             await ChangeFilesizeLimit();
         }
-        IsMediaControlEnabled = Convert.ToBoolean(roleAttribute?.Value) == true;
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[LoadRoleAttributes] Error: {ex.Message}");
+        Console.WriteLine(ex.StackTrace);
+        // Optionally log to a file or external service
+    }
+}
 
     private async Task OnChangedRole(string role)
     {
@@ -84,9 +127,9 @@
         await LoadRoleAttributes();
     }
 
-    private async Task AddRoleAttributes(bool isActive)
+    private async Task AddRoleAttributes(bool isActive, string attributeName)
     {
-        await RoleAttributeService.AddRoleAttributes(selectedId, "MediaControl", Convert.ToInt32(isActive));
+        await RoleAttributeService.AddRoleAttributes(selectedId, attributeName, Convert.ToInt32(isActive));
         ShowMessage(ToastType.Dark);
     }
     private async Task ChangeFilesizeLimit()

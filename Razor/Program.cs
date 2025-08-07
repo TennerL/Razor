@@ -16,7 +16,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+    .AddInteractiveServerComponents()
+ .AddCircuitOptions(options => options.DetailedErrors = true);
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<FileAccessService>();
 builder.Services.AddScoped<RequestFileService>();
@@ -80,6 +81,8 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 
+//builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 
 app.UseAntiforgery();

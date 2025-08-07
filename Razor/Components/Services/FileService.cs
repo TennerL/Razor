@@ -73,6 +73,35 @@ public class FileService
 
             return folders;
         }
+        public async Task<string?> GetTextFileContent(string dataSource, string path, string filename)
+        {
+            var fullPath = Path.Combine(dataSource, path, filename);
+            if (File.Exists(fullPath))
+            {
+                return await File.ReadAllTextAsync(fullPath);
+            }
+            return null;
+        }
+        public async Task SaveTextFileContent(string dataSource, string path, string filename, string content)
+        {
+            var fullPath = Path.Combine(dataSource, path, filename);
+            await File.WriteAllTextAsync(fullPath, content);
+        }
+
+        public async Task CreateFolder(string path, string folderName)
+        {
+            var fullPath = Path.Combine(path, folderName);
+            if (!Directory.Exists(fullPath))
+                Directory.CreateDirectory(fullPath);
+        }
+
+        public async Task CreateTextFile(string path, string fileName, string content)
+        {
+            var fullPath = Path.Combine(path, fileName);
+            if (!File.Exists(fullPath))
+                await File.WriteAllTextAsync(fullPath, content);
+        }
+
 
     }
 

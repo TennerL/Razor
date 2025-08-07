@@ -16,7 +16,7 @@
     }
 </style>
 
-<select class="form-select" style="margin-bottom:10px;" @onchange="async (e) => LoadAll(e.Value?.ToString())">
+<select class="form-select" style="margin-bottom:10px; border-radius:40px; font-weight: bold; text-align:center;" @onchange="async (e) => LoadAll(e.Value?.ToString())">
     @foreach (var dataSource in dataSources)
     {
         <option value="@dataSource.SourcePath">@dataSource.SourcePath</option>
@@ -32,6 +32,16 @@
         }
     </ol>
 </nav>
+<div class="mb-3 d-flex gap-2">
+    <input class="form-control" style="width: 200px;" @bind="newFolderName" placeholder="Neuer Ordnername" />
+    <button class="btn btn-success" @onclick="CreateFolder">Ordner erstellen</button>
+
+    <input class="form-control" style="width: 200px;" @bind="newFileName" placeholder="Neue Textdatei.txt" />
+    <button class="btn btn-primary" @onclick="CreateTextFile">.txt Datei erstellen</button>
+    <button class="btn btn-primary" @onclick="OnShowModalUploadClick">Upload</button>
+
+</div>
+
 
 <input class="form-control" placeholder="Suche" @bind="searchTerm" @oninput="OnSearchChanged" />
 
@@ -64,7 +74,7 @@
                 <tr>
                     <td style="width: 40px;">@index</td>
                     <td style="width: 60px;">
-                        @if (!item.IsFolder && IsImage(item.Name))
+                        @if (!item.IsFolder && IsImage(item.Name) && thumbnailFeature)
                         {
                             <img src="@WebUrl/@currentDataSource.Replace(@"\","|")/@string.Concat(currentPath.Replace(@"\", "|") + item.Name)" alt="@item.Name" style="width: 50px; height: 50px; object-fit: cover;" />
                         }
@@ -88,7 +98,7 @@
                             }
                             else
                             {
-                                <button class="btn btn-link" @onclick="@(() => GetFileStream(currentPath.Replace(@"\", "|"), item.Name))"
+                                <button class="btn btn-link" @onclick="@(() => GetFileStream(currentPath, item.Name))"
                                 style="text-decoration:none; color:white; margin: 0; padding: 0;">
                                     @item.Name
                                 </button>
@@ -136,9 +146,14 @@
         <div class="form-check form-switch mb-2" style="display:flex;">
             <input class="form-check-input" type="checkbox" role="switch" id="autoplaySwitch" style="margin: auto; margin-right: 0;" @bind ="autoplayEnabled" />
         </div>
-        @if (!string.IsNullOrEmpty(mediaFileUrl))
+       @if (isTextFile && !string.IsNullOrEmpty(textFileContent))
         {
-            @if (mediaFileUrl.EndsWith(".mp4") || mediaFileUrl.EndsWith(".webm") || mediaFileUrl.EndsWith(".mkv"))
+            <textarea class="form-control" style="height: 70vh; width: 100%;" @bind="textFileContent"></textarea>
+            <button class="btn btn-success mt-2" @onclick="SaveTextFile">Speichern</button>
+        }
+        else if (!string.IsNullOrEmpty(mediaFileUrl))
+        {
+            if (mediaFileUrl.EndsWith(".mp4") || mediaFileUrl.EndsWith(".webm") || mediaFileUrl.EndsWith(".mkv"))
             {
                 <video controls autoplay width="100%" tabindex="-1" @onended="HandleMediaEnded">
                     <source src="@mediaFileUrl" type="video/mp4">
@@ -162,7 +177,12 @@
             }
             else if (mediaFileUrl.EndsWith(".pdf"))
             {
-                <iframe style="width:100%;height:100%;" src="@mediaFileUrl" ></iframe>
+                <div style="position: relative; height: 75vh; overflow: hidden;">
+                    <iframe src="@mediaFileUrl"
+                            style="position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+                                   width: 100%; height: 100%; border: none;">
+                    </iframe>
+                </div>
             }
             else
             {
@@ -170,12 +190,22 @@
                 <a href="@mediaFileUrl" target="_blank">Datei öffnen</a>
             }
         }
-
     </BodyTemplate>
 </Modal>
 
+<Modal @ref="upload" Title="Upload" UseStaticBackdrop="true" OnHidePrevented="OnHideModalUploadClick" Size="ModalSize.Large">
+    <BodyTemplate>
+        <Upload dataSource="@currentDataSource"
+                CurrentPath="@currentFolderPath"
+                OnUploadComplete="@OnUploadFinished" />
+    </BodyTemplate>
+</Modal>
+
+@currentFolderPath
+
 @code {
     private Modal media = default!;
+    private Modal upload = default!;
     private string mediaFileUrl = "";
     private int currentMediaIndex = 0;
     private bool autoplayEnabled = false;
@@ -196,7 +226,13 @@
     private string WebUrl = "";
     private string currentDataSource = "";
     private bool mediaControlFeature = false;
+    private bool thumbnailFeature = false;
     public List<string> pagedFilesList { get; private set; } = new();
+    private string? textFileContent = null;
+    private bool isTextFile = false; 
+    private string newFolderName = "";
+    private string newFileName = "";
+    private string currentFolderPath = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -264,6 +300,7 @@
 
         folders = FileService.FetchFoldersFromFolder(currentPath, currentDataSource);
         files = FileService.FetchFilesFromFolder(currentPath, currentDataSource);
+        currentFolderPath = currentPath;
 
         UpdateTotalPages();
         UpdatePagedFilesList();
@@ -283,6 +320,11 @@
     {
         string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
         return imageExtensions.Any(ext => fileName.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private async Task OnUploadFinished()
+    {
+        GoToFolder(currentFolderPath, "bcnav", currentDataSource);
     }
 
 
@@ -311,23 +353,77 @@
         }
     }
 
-    private async Task GetFileStream(string currentPath, string requestedFile)
-    {
-        currentMediaIndex = pagedFilesList.IndexOf(requestedFile);
+private async Task GetFileStream(string currentPath, string requestedFile)
+{
+    currentMediaIndex = pagedFilesList.IndexOf(requestedFile);
+    isTextFile = requestedFile.EndsWith(".txt", StringComparison.OrdinalIgnoreCase);
 
-        if (currentMediaIndex >= 0)
+    if (currentMediaIndex >= 0)
+    {
+        mediaFileUrl = "";
+        textFileContent = null;
+        StateHasChanged();
+        await Task.Delay(100);
+
+        var normalizedPath = currentPath ?? "";
+        if (!string.IsNullOrEmpty(normalizedPath) && !normalizedPath.EndsWith("\\"))
         {
-            mediaFileUrl = "";
-            StateHasChanged();
-            await Task.Delay(100);
-            mediaFileUrl = $"{WebUrl}/{currentDataSource.Replace(@"\","|")}/{currentPath.Replace(@"\", "|")}{requestedFile}";
-            await media.ShowAsync();
+            normalizedPath += "\\";
+        }
+
+        normalizedPath = normalizedPath.Replace(@"\", "|");
+
+        var filePath = $"{WebUrl}/{currentDataSource.Replace(@"\", "|")}/{normalizedPath}{requestedFile}";
+
+        if (isTextFile)
+        {
+            textFileContent = await FileService.GetTextFileContent(currentDataSource, currentPath, requestedFile);
         }
         else
         {
-            mediaFileUrl = "Index is NULL!";
+            mediaFileUrl = filePath;
+        }
+
+        await media.ShowAsync();
+    }
+    else
+    {
+        mediaFileUrl = "Index is NULL!";
+    }
+}
+
+
+    private async Task SaveTextFile()
+    {
+        await FileService.SaveTextFileContent(currentDataSource, currentPath, pagedFilesList[currentMediaIndex], textFileContent ?? "");
+    }
+
+
+    private async Task CreateFolder()
+    {
+        if (!string.IsNullOrWhiteSpace(newFolderName))
+        {
+            string path = Path.Combine(currentDataSource, currentPath);
+            await FileService.CreateFolder(path, newFolderName);
+            GoToFolder(currentFolderPath, "bcnav", currentDataSource);
+            newFolderName = "";
         }
     }
+
+    private async Task CreateTextFile()
+    {
+        if (!string.IsNullOrWhiteSpace(newFileName))
+        {
+            if (!newFileName.EndsWith(".txt"))
+                newFileName += ".txt";
+
+            string path = Path.Combine(currentDataSource, currentPath);
+            await FileService.CreateTextFile(path, newFileName, "-- generated by Razor ---"); 
+            GoToFolder(currentFolderPath, "bcnav", currentDataSource);
+            newFileName = "";
+        }
+    }
+
 
     private async Task OnShowModalClick()
     {
@@ -342,6 +438,22 @@
         if (media != null)
         {
             await media.HideAsync();
+        }
+    }
+
+    private async Task OnShowModalUploadClick()
+    {
+        if (upload != null)
+        {
+            await upload.ShowAsync();
+        }
+    }
+
+    private async Task OnHideModalUploadClick()
+    {
+        if (upload != null)
+        {
+            await upload.HideAsync();
         }
     }
 
@@ -384,6 +496,10 @@
     {
         roleAttributes = await RoleAttributeService.GetRoleAttribute(role, "MediaControl");
         mediaControlFeature = Convert.ToBoolean(roleAttributes?.Value);
+
+        var thumbAttribute = await RoleAttributeService.GetRoleAttribute(role, "Thumbnails");
+        thumbnailFeature = Convert.ToBoolean(thumbAttribute?.Value);
+
     }
 
     private void HandleItemsPerPageChange(ChangeEventArgs e)

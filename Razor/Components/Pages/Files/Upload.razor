@@ -1,7 +1,6 @@
 ﻿@page "/upload"
 @using System.Security.Claims
 @inject IWebHostEnvironment env
-@inject DataSourceService DataSourceService
 @inject UserManagementService UserManagementService
 @inject RoleAttributeService RoleAttributeService
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -9,110 +8,145 @@
 
 <h3>Upload</h3>
 
-<select class="form-select" style="margin-bottom:10px;" @bind="dataSource">
-    @foreach (var dataSource in dataSources)
-    {
-        <option value="@dataSource.SourcePath">@dataSource.SourcePath</option>
-    }
-</select>
-
-<InputFile OnChange="HandleFileUpload" multiple />
+<label class="drop-zone" for="fileInput"
+       ondragover="event.preventDefault();">
+    <p>Drag & drop files here or click to select</p>
+    <InputFile id="fileInput" OnChange="@HandleFileUpload" multiple />
+</label>
 
 @if (uploadInProgress)
 {
     <div class="mt-2">
-        <b>Uploading: @progress% </b>
+        <b>Uploading: @progress%</b>
         <ProgressBar Value="@progress" />
     </div>
 }
 
 @if (!string.IsNullOrEmpty(uploadMessage))
 {
-    <p>@uploadMessage</p>
+    <p>@((MarkupString)uploadMessage)</p>
 }
 
 <div class="row">
-    <b>Maximale Dateigröße: @maxSize</b>
-    <b>In Bytes: @maxFileSize </b>
+    <b>Maximale Dateigröße: @maxSize MB</b>
+    <br />
+    <b>In Bytes: @maxFileSize</b>
 </div>
+
+<style>
+    .drop-zone {
+        width: 100%;
+        height: 50%;
+        border: 2px dashed #6c757d;
+        padding: 30px;
+        text-align: center;
+        border-radius: 10px;
+        background-color: #2b3036;
+        cursor: pointer;
+    }
+
+        .drop-zone:hover {
+            background-color: #495059;
+        }
+</style>
 
 @code {
     private string uploadMessage = "";
     private RoleAttributes? maxSizeAttribute;
     private List<string> roles = new();
     private string role = "";
-    private List<DataSources> dataSources = new();
-    private string dataSource = "";
-    private int progress = 0;
-    private bool uploadInProgress = false;
-    private long maxSize = 0;
-    private long maxFileSize = 0;
+    private int progress;
+    private bool uploadInProgress;
+    private long maxSize;
+    private long maxFileSize;
+
+    [Parameter] public EventCallback OnUploadComplete { get; set; }
+    [Parameter] public string dataSource { get; set; } = "";
+    [Parameter] public string CurrentPath { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadDataSources();
         await LoadRoles();
         await LoadRoleAttribute();
     }
 
-    protected async Task LoadRoles()
+    private async Task LoadRoles()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User.Identity;
-        var userId = authState.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+        var userId = user.FindFirst(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+
         if (userId != null)
         {
             roles = await UserManagementService.GetRoleOfUserAsync(userId);
-            role = roles.First();
+            role = roles.FirstOrDefault() ?? "";
         }
+
         StateHasChanged();
     }
 
     private async Task LoadRoleAttribute()
     {
         maxSizeAttribute = await RoleAttributeService.GetRoleAttribute(role, "MaxFileSize");
-        maxSize = maxSizeAttribute.Value;
+        maxSize = maxSizeAttribute?.Value ?? 0;
         maxFileSize = maxSize * 1024 * 1024;
-        StateHasChanged();
-    }
-
-    private async Task LoadDataSources()
-    {
-        dataSources = await DataSourceService.GetDataSources();
-        dataSource = dataSources.First().SourcePath;
     }
 
     private async Task HandleFileUpload(InputFileChangeEventArgs e)
     {
-        var file = e.File;
+        var files = e.GetMultipleFiles();
+        await ProcessFiles(files);
+    }
 
-        if (file.Size > maxFileSize)
+    private async Task ProcessFiles(IReadOnlyList<IBrowserFile> files)
+    {
+        uploadInProgress = true;
+        progress = 0;
+        int completed = 0;
+
+        string targetFolder = Path.Combine(dataSource, CurrentPath ?? "");
+
+        if (!Directory.Exists(targetFolder))
         {
-            uploadMessage = "File is too large!";
-            return;
+            Directory.CreateDirectory(targetFolder);
         }
 
-        var filePath = Path.Combine(dataSource, file.Name);
-        uploadMessage = "Uploading...";
-        uploadInProgress = true;
-
-        var buffer = new byte[1024 * 1024];
-        long totalBytes = file.Size;
-        long bytesUploaded = 0;
-
-        await using FileStream fs = new(filePath, FileMode.Create);
-        await using var stream = file.OpenReadStream(maxFileSize);
-
-        int bytesRead;
-        while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+        foreach (var file in files)
         {
-            await fs.WriteAsync(buffer, 0, bytesRead);
-            bytesUploaded += bytesRead;
-            progress = (int)((bytesUploaded * 100) / totalBytes);
-            StateHasChanged(); // Force UI update
+            if (file.Size > maxFileSize)
+            {
+                uploadMessage += $"'{file.Name}' is too large! Skipping.<br />";
+                continue;
+            }
+
+            var filePath = Path.Combine(targetFolder, file.Name);
+            var buffer = new byte[1048576]; // 1 MB buffer
+            var totalBytes = file.Size;
+            long bytesUploaded = 0;
+
+            await using var fs = new FileStream(filePath, FileMode.Create);
+            await using var stream = file.OpenReadStream(maxFileSize);
+
+            int bytesRead;
+            while ((bytesRead = await stream.ReadAsync(buffer)) > 0)
+            {
+                await fs.WriteAsync(buffer.AsMemory(0, bytesRead));
+                bytesUploaded += bytesRead;
+
+                progress = (int)(((double)completed + (double)bytesUploaded / totalBytes) / files.Count * 100);
+                StateHasChanged();
+            }
+
+            completed++;
+            uploadMessage += $"'{file.Name}' uploaded successfully.<br />";
         }
 
         uploadInProgress = false;
-        uploadMessage = "Upload Complete!";
+        progress = 100;
+        if (OnUploadComplete.HasDelegate)
+        {
+            await OnUploadComplete.InvokeAsync();
+        }
+
+        StateHasChanged();
     }
 }
