@@ -7,20 +7,15 @@
 The application as it is provides safe and efficient directory browsing and file fetching from an external source.
 It also comes with built-in user management features, role management and enables setting custom access rules for individual files. 
 
-For future development I'd like to add:
+Some of the features include:
 
-- Multimedia features e.g. embedded Image and video viewing, maybe thumbnails ✓
+- Multimedia features e.g. embedded Image and video viewing and also basic text-editing
 
-- Multiple remote sources ✓
+- Multiple remote sources you can easily add and remove
 
-- Option to upload files ✓
+- Role-Management and custom file access rules
 
-- Option to share specific files to non authenticated users / entitys
-
-- Maybe later adding Nextcloud-like features
-
-- English localization 
-
+- Upload, download, subfolder management 
 
 
 To Initialize the Database:
