@@ -19,7 +19,7 @@ public class FileCleanupService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken); 
+            await Task.Delay(TimeSpan.FromMinutes(300), stoppingToken); 
             
             foreach (var file in _filesToDelete)
             {

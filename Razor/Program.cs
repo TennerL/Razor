@@ -16,8 +16,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents()
- .AddCircuitOptions(options => options.DetailedErrors = true);
+    .AddInteractiveServerComponents();
+ //.AddCircuitOptions(options => options.DetailedErrors = true);
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<FileAccessService>();
 builder.Services.AddScoped<RequestFileService>();

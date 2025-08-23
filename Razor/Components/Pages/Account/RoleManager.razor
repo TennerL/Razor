@@ -6,7 +6,7 @@
 
 <select class="form-select" @onchange="async (e) => await OnChangedRole(e.Value?.ToString())">
     <option value="">Auswahl</option>
-    @foreach(var role in roles)
+    @foreach (var role in roles)
     {
         <option value="@role.Id">@role.Name</option>
     }
@@ -15,20 +15,37 @@
 @if (!string.IsNullOrEmpty(selectedId))
 {
     <div class="row" style="margin-top:10px;">
-        <div class="col">
-            <label for="mediaControl">Medienfeatures: </label>
+        <div class="col-6">
+            <label for="mediaControl">Medienfeatures:</label>
             <div id="mediaControl" class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" checked="@IsMediaControlEnabled" id="switchMediaControl" @onchange="OnMediaControlChanged" />
+                <input class="form-check-input" type="checkbox" role="switch"
+                       checked="@IsMediaControlEnabled" id="switchMediaControl"
+                       @onchange="OnMediaControlChanged" />
             </div>
-            <label for="thumbControl">Thumbnails: </label>
-            <div id="thumbControl" class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" checked="@IsThumbnailEnabled" id="switchThumbnailControl" @onchange="OnThumbnailControlChanged" />
-            </div>
-            <label for="maxFilesize">Max. Upload (MB)</label>
-            <input id="maxFilesize" class="form-control" type="number" value="@maxFileSize" @onchange="(e) => { maxFileSize = Convert.ToInt32(e.Value); ChangeFilesizeLimit(); }" /> 
         </div>
-    </div>
 
+        <div class="col-6">
+            <label for="thumbControl">Thumbnails:</label>
+            <div id="thumbControl" class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch"
+                       checked="@IsThumbnailEnabled" id="switchThumbnailControl"
+                       @onchange="OnThumbnailControlChanged" />
+            </div>
+        </div>
+
+        <div class="col-6">
+            <label for="autoplayControl">Autoplay:</label>
+            <div id="autoplayControl" class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" checked="@IsAutoplayEnabled" @onchange="OnAutoplayControlChanged"
+                       id="switchAutoplayControl" />
+            </div>
+        </div>
+
+
+        <label for="maxFilesize">Max. Upload (MB)</label>
+        <input id="maxFilesize" class="form-control" type="number" value="@maxFileSize"
+               @onchange="(e) => { maxFileSize = Convert.ToInt32(e.Value); ChangeFilesizeLimit(); }" />
+    </div>
 }
 
 
@@ -38,20 +55,22 @@
     RoleAttributes? roleAttribute;
     RoleAttributes? maxSizeAttribute;
     RoleAttributes? thumbnailAttribute;
+    RoleAttributes? autoplayAttribute;
     List<UserDto> users = new();
     int maxFileSize = 0;
     string selectedId = "";
     private bool IsMediaControlEnabled = false;
-    private bool IsThumbnailEnabled = false; 
+    private bool IsThumbnailEnabled = false;
+    private bool IsAutoplayEnabled = false;
 
     private void ShowMessage(ToastType toastType)
     {
         ToastService.Notify(new ToastMessage
-            {
-                Type = toastType,
-                Title = "Admin",
-                Message = $"Änderungen gespeichert {DateTime.Now}"
-            });
+        {
+            Type = toastType,
+            Title = "Admin",
+            Message = $"Änderungen gespeichert {DateTime.Now}"
+        });
     }
 
 
@@ -65,6 +84,11 @@
         IsThumbnailEnabled = e.Value?.ToString()?.ToLower() == "true";
         await AddRoleAttributes(IsThumbnailEnabled, "Thumbnails");
     }
+    private async Task OnAutoplayControlChanged(ChangeEventArgs e)
+    {
+        IsAutoplayEnabled = e.Value?.ToString()?.ToLower() == "true";
+        await AddRoleAttributes(IsAutoplayEnabled, "Autoplay");
+    }
 
 
     protected override async Task OnInitializedAsync()
@@ -77,49 +101,35 @@
         roles = await UserManagementService.GetRoles();
     }
 
-    // private async Task LoadRoleAttributes()
-    // {
-    //     roleAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "MediaControl");
-    //     thumbnailAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "Thumbnails");
-    //     IsThumbnailEnabled = Convert.ToBoolean(thumbnailAttribute?.Value) == true;
-
-    //     maxSizeAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "MaxFileSize");
-    //     if(maxSizeAttribute != null){
-    //         maxFileSize = maxSizeAttribute.Value;
-    //     } else
-    //     {
-    //         await ChangeFilesizeLimit();
-    //     }
-    //     IsMediaControlEnabled = Convert.ToBoolean(roleAttribute?.Value) == true;
-    // }
 
     private async Task LoadRoleAttributes()
-{
-    try
     {
-        roleAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "MediaControl");
-        thumbnailAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "Thumbnails");
-        maxSizeAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "MaxFileSize");
-
-        IsMediaControlEnabled = Convert.ToBoolean(roleAttribute?.Value ?? 0);
-        IsThumbnailEnabled = Convert.ToBoolean(thumbnailAttribute?.Value ?? 0);
-
-        if (maxSizeAttribute != null)
+        try
         {
-            maxFileSize = maxSizeAttribute.Value;
+            roleAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "MediaControl");
+            thumbnailAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "Thumbnails");
+            maxSizeAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "MaxFileSize");
+            autoplayAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "Autoplay");
+
+            IsMediaControlEnabled = Convert.ToBoolean(roleAttribute?.Value ?? 0);
+            IsThumbnailEnabled = Convert.ToBoolean(thumbnailAttribute?.Value ?? 0);
+            IsAutoplayEnabled = Convert.ToBoolean(autoplayAttribute?.Value ?? 0);
+
+            if (maxSizeAttribute != null)
+            {
+                maxFileSize = maxSizeAttribute.Value;
+            }
+            else
+            {
+                await ChangeFilesizeLimit();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            await ChangeFilesizeLimit();
+            Console.WriteLine($"[LoadRoleAttributes] Error: {ex.Message}");
+            Console.WriteLine(ex.StackTrace);
         }
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"[LoadRoleAttributes] Error: {ex.Message}");
-        Console.WriteLine(ex.StackTrace);
-        // Optionally log to a file or external service
-    }
-}
 
     private async Task OnChangedRole(string role)
     {
