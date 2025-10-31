@@ -25,21 +25,21 @@ public class FileService
                 .ToList();
         }
 
-        public List<string> GetFolders(string _directoryPath)
+        public List<string> GetFolders(string? directoryPath)
         {
-            if (!Directory.Exists(_directoryPath))
-            {
+            if (string.IsNullOrWhiteSpace(directoryPath))
                 return new List<string>();
-            }
 
-            var folders = new List<string>();
+            if (!Directory.Exists(directoryPath))
+                return new List<string>();
 
-            var directorys = Directory.GetDirectories(_directoryPath).Select(Path.GetFileName).ToList();
-            folders.AddRange(directorys);
-            return folders;
+            return Directory.GetDirectories(directoryPath)
+                            .Select(Path.GetFileName)
+                            .Where(name => name != null)
+                            .ToList()!;
         }
 
-            public List<FileData> FetchFilesFromFolder(string folder, string directoryPath)
+        public List<FileData> FetchFilesFromFolder(string folder, string directoryPath)
             {
                 string requestedPath = Path.Combine(directoryPath, folder);
                 if (!Directory.Exists(requestedPath))
@@ -58,21 +58,25 @@ public class FileService
                     .OrderByDescending(file => file.Date) 
                     .ToList();
             }
-  
 
-        public List<string> FetchFoldersFromFolder(string file, string _directoryPath)
+
+        public List<string> FetchFoldersFromFolder(string? file, string? directoryPath)
         {
-            var requestedPath = string.Concat(_directoryPath, file);
-            if (!Directory.Exists(requestedPath))
-            {
+            if (string.IsNullOrWhiteSpace(directoryPath))
                 return new List<string>();
-            }
-            var folders = new List<string>();
-            var directorys = Directory.GetDirectories(requestedPath).Select(Path.GetFileName).ToList();
-            folders.AddRange(directorys);
 
-            return folders;
+            var requestedPath = Path.Combine(directoryPath, file ?? string.Empty);
+
+            if (!Directory.Exists(requestedPath))
+                return new List<string>();
+
+            return Directory.GetDirectories(requestedPath)
+                            .Select(Path.GetFileName)
+                            .Where(name => name != null)
+                            .ToList()!;
         }
+
+
         public async Task<string?> GetTextFileContent(string dataSource, string path, string filename)
         {
             var fullPath = Path.Combine(dataSource, path, filename);
@@ -88,7 +92,7 @@ public class FileService
             await File.WriteAllTextAsync(fullPath, content);
         }
 
-        public async Task CreateFolder(string path, string folderName)
+        public void CreateFolder(string path, string folderName)
         {
             var fullPath = Path.Combine(path, folderName);
             if (!Directory.Exists(fullPath))
@@ -102,7 +106,7 @@ public class FileService
                 await File.WriteAllTextAsync(fullPath, content);
         }
 
-        public async Task DeleteFile(string dataSource, string path, string filename)
+        public void DeleteFile(string dataSource, string path, string filename)
         {
             var fullPath = Path.Combine(dataSource, path, filename);
 

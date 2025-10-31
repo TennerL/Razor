@@ -12,8 +12,8 @@
 }
 else
 {
-    <p>Welcome, @user.Identity.Name!</p>
-    @if (!user.Identity.IsAuthenticated)
+    <p>Welcome, @user?.Identity?.Name!</p>
+    @if (!user?.Identity?.IsAuthenticated ?? false)
     {
         Navigation.NavigateTo("/Account/login");
     }
@@ -21,7 +21,7 @@ else
 
 @code {
 
-    private System.Security.Claims.ClaimsPrincipal user;
+    private System.Security.Claims.ClaimsPrincipal? user;
 
     protected override async Task OnInitializedAsync()
     {

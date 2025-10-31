@@ -18,12 +18,11 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var user = await _userManager.GetUserAsync(_signInManager.Context.User);
-        //var userId = _userManager.GetUserId(_signInManager.Context.User);
-
+        
         var identity = user != null
             ? new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
                 new Claim(ClaimTypes.NameIdentifier, user.Id)
             }, "Bearer")
             : new ClaimsIdentity();
@@ -36,7 +35,7 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
         var identity = new ClaimsIdentity(new[]
         {
-            new Claim(ClaimTypes.Name, user.UserName)
+            new Claim(ClaimTypes.Name, user.UserName ?? string.Empty)
         }, "Bearer");
 
         var userPrincipal = new ClaimsPrincipal(identity);

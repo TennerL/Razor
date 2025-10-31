@@ -60,7 +60,7 @@
                     <td>@user.UserName</td>
                     <td>@user.Email</td>
                     <td>
-                        <select class="form-select" @onchange="async (e) => await ChangeUserRole(user, e.Value?.ToString())">
+                        <select class="form-select" @onchange="async (e) => await ChangeUserRole(user, e.Value?.ToString() ?? String.Empty)">
                             @foreach (var role in roles)
                             {
                                 @if (role.Name == user.Role)
@@ -189,7 +189,7 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
         var user = authState.User.Identity;
-        var userId = authState.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var userId = authState.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? String.Empty;
 
         if (user != null && user.IsAuthenticated)
         {
@@ -232,7 +232,7 @@ private async Task ChangeUserRole(UserDto user, string newRole)
 
     private async Task DeleteUser(UserDto user)
     {
-        await UserManagementService.DeleteUserAsync(user.Id);
+        await UserManagementService.DeleteUserAsync(user.Id ?? String.Empty);
         await LoadUsers();
         ShowMessage(ToastType.Dark);
     }

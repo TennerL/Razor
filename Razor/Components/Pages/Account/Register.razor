@@ -75,12 +75,12 @@
     {
         errorMessages.Clear();  
 
-        if (Model.Password != Model.ConfirmPassword)
+        if (Model?.Password != Model?.ConfirmPassword)
         {
             errorMessages.Add("Passwords do not match.");
             return;
         }
-        if (string.IsNullOrEmpty(Model.Username))
+        if (string.IsNullOrEmpty(Model?.Username))
         {
             errorMessages.Add("No Username");
             return;

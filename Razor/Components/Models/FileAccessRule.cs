@@ -7,8 +7,8 @@ namespace Razor.Components.Models
     {
         public int Id { get; set; }
         public string FilePath { get; set; } = string.Empty;
-        public string UserId { get; set; } 
-        public IdentityUser User { get; set; }
+        public string? UserId { get; set; } 
+        public IdentityUser? User { get; set; }
         public string Permission { get; set; } = string.Empty;
     }
 

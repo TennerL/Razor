@@ -16,10 +16,11 @@
 <style>
     th, td {
         vertical-align: middle !important;
+        padding: .1rem .1rem !important;
     }
 </style>
 
-<select class="form-select" style="margin-bottom:10px; border-radius:40px; font-weight: bold; text-align:center;" @onchange="async (e) => LoadAll(e.Value?.ToString())">
+<select class="form-select" style="margin-bottom:10px; border-radius:40px; font-weight: bold; text-align:center;" @onchange="async (e) => LoadAll(e.Value?.ToString() ?? String.Empty)">
     @foreach (var dataSource in dataSources)
     {
         <option value="@dataSource.SourcePath">@dataSource.SourcePath</option>
@@ -36,13 +37,13 @@
     </ol>
 </nav>
 <div class="mb-3 d-flex gap-2">
-    <input class="form-control" style="width: 200px;" @bind="newFolderName" placeholder="Neuer Ordnername" />
-    <button class="btn btn-success" @onclick="CreateFolder">Ordner erstellen</button>
+    <input class="form-control" @bind="newFolderName" placeholder="Neuer Ordnername" />
+    <Button Color="ButtonColor.Success" Outline="true" @onclick="CreateFolder"><span class="bi bi-folder-plus"></span></Button>
 
-    <input class="form-control" style="width: 200px;" @bind="newFileName" placeholder="Neue Textdatei.txt" />
-    <button class="btn btn-primary" @onclick="CreateTextFile">.txt Datei erstellen</button>
+    <input class="form-control" @bind="newFileName" placeholder="Neue Textdatei" />
+    <Button Color="ButtonColor.Success" Outline="true" @onclick="CreateTextFile"><span class="bi bi-file-earmark-plus"></span></Button>
     <div class="ms-auto">
-        <button class="btn btn-primary" @onclick="OnShowModalUploadClick">Upload</button>
+        <Button Color="ButtonColor.Primary" Outline="true" @onclick="OnShowModalUploadClick"><span class="bi bi-upload"></span></Button>
     </div>
 
 </div>
@@ -50,80 +51,89 @@
 
 <input class="form-control" placeholder="Suche" @bind="searchTerm" @oninput="OnSearchChanged" />
 
-<table class="table table-striped" style="margin-top:10px;" @onfocusin="OnHideModalClick">
-    <thead>
-        <tr>
-            <th style="width: 40px;">#</th>
-            <th style="width: 60px;"></th>
-            <th>Dateiname</th>
-            <th>Dateigröße</th>
-            <th>Datum</th>
-            <th>Aktion</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (files == null && folders == null)
-        {
-            <p>Lade Dateien...</p>
-        }
-        else if (!files.Any() && !folders.Any())
-        {
-            <p>Keine Dateien gefunden.</p>
-        }
-        else
-        {
-
-            int index = (currentPage - 1) * itemsPerPage + 1;
-
-            @foreach (var item in PagedItems)
+<div class="table-responsive" style="margin-top:10px;">
+    <table class="table table-striped w-100" @onfocusin="OnHideModalClick">
+        <thead>
+            <tr>
+                <th style="width: 2%; text-align:center;">#</th>
+                <th style="width: 5%;"></th>
+                <th style="width: 70%;">Dateiname</th>
+                <th style="width: 10%;">Dateigröße</th>
+                <th style="width: 8%;">Datum</th>
+                <th style="width: 5%; text-align:center;">Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (files == null && folders == null)
             {
-                <tr>
-                    <td style="width: 40px;">@index</td>
-                    <td style="width: 60px;">
-                        @if (!item.IsFolder && IsImage(item.Name) && thumbnailFeature)
-                        {
-                            <img src="@WebUrl/@currentDataSource.Replace(@"\","|")/@string.Concat(currentPath.Replace(@"\", "|") + item.Name)" alt="@item.Name" style="width: 50px; height: 50px; object-fit: cover;" />
-                        }
-                    </td>
-                    <td>
-                        @if (item.IsFolder)
-                        {
-                            <button class="btn btn-link" @onclick="@(() => GoToFolder(item.Name, "", currentDataSource))"
-                            style="text-decoration:none; color:white; margin: 0; padding: 0;">
-                                [Dir] @item.Name
-                            </button>
-                        }
-                        else
-                        {
-                            if (!mediaControlFeature)
+                    <tr>
+                        <td colspan="6" style="text-align:center;">Lade Dateien...</td>
+                    </tr>
+            }
+            else if (!PagedItems.Any() && !folders.Any())
+            {
+                    <tr>
+                        <td colspan="6" style="text-align:center;">Keine Dateien gefunden.</td>
+                    </tr>
+            }
+            else
+            {
+                int index = (currentPage - 1) * itemsPerPage + 1;
+
+                @foreach (var item in PagedItems)
+                {
+                            <tr>
+                                        <td style="font-size:small; text-align:center;">@index</td>
+                                <td>
+                            @if (!item.IsFolder && IsImage(item.Name) && thumbnailFeature)
                             {
-                                <a href="@WebUrl/@currentDataSource.Replace(@"\","|")/@string.Concat(currentPath.Replace(@"\", "|"), "|" + item.Name)"
-                                style="text-decoration:none; color:white;">
-                                    @item.Name
-                                </a>
+                                            <img src="@WebUrl/@currentDataSource.Replace(@"\","|")/@string.Concat(currentPath.Replace(@"\", "|") + item.Name)" 
+                                                 alt="@item.Name" style="width:50px; height:50px; object-fit:cover;" />
+                            }
+                                </td>
+                                <td>
+                            @if (item.IsFolder)
+                            {
+                                            <button class="btn btn-link p-0 m-0 text-start" 
+                                                    style="font-size:small; text-decoration:none; color:white;" 
+                                                    @onclick="@(() => GoToFolder(item.Name, "", currentDataSource))">
+                                                [Dir] @item.Name
+                                            </button>
                             }
                             else
                             {
-                                <button class="btn btn-link" @onclick="@(() => GetFileStream(currentPath, item.Name))"
-                                style="text-decoration:none; color:white; margin: 0; padding: 0;">
-                                    @item.Name
-                                </button>
+                                if (!mediaControlFeature)
+                                {
+                                                    <a href="@WebUrl/@currentDataSource.Replace(@"\","|")/@string.Concat(currentPath.Replace(@"\", "|"), "|" + item.Name)"
+                                                       style="text-decoration:none; color:white; font-size:small; display:block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        @item.Name
+                                                    </a>
+                                }
+                                else
+                                {
+                                                    <button class="btn btn-link p-0 m-0 text-start" 
+                                                            style="font-size:small; text-decoration:none; color:white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                                            @onclick="@(() => GetFileStream(currentPath, item.Name))">
+                                        @item.Name
+                                                    </button>
+                                }
                             }
-                        }
-                    </td>
-                    <td>@(item.IsFolder ? "" : FormatFileSize(item.FileInfo?.Size) ?? "")</td>
-                    <td>@(item.IsFolder ? "" : item.FileInfo?.Date.ToString("dd.MM.yyyy HH:mm") ?? "")</td>
-                    @* <td><button Class="btn btn-link" @onclick="@(() => DeleteFile(currentPath, item.Name))"> *@
-                    <td><button Class="btn btn-link" @onclick="@(async () => await ShowConfirmationModal(currentPath, item.Name))">
-                            <span class="bi bi-trash" aria-hidden="true"></span>
-                        </button>
-                    </td>
-                </tr>
-                index++;
+                                </td>
+                                <td><span style="font-size:small; color:white;">@(item.IsFolder ? "" : FormatFileSize(item.FileInfo?.Size) ?? "")</span></td>
+                                <td><span style="font-size:small; color:white;">@(item.IsFolder ? "" : item.FileInfo?.Date.ToString("dd.MM.yyyy HH:mm") ?? "")</span></td>
+                                <td style="text-align:center;">
+                                    <button class="btn btn-link text-danger p-0" 
+                                            @onclick="@(async () => await ShowConfirmationModal(currentPath, item.Name))">
+                                        <span class="bi bi-trash" aria-hidden="true"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                    index++;
+                }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 
 <div class="row" style="margin-bottom:50px">
     <div class="col-sm-4" style="display:block ruby; gap:10px;">
@@ -137,15 +147,26 @@
             <option value="1000">1000</option>
         </select>
 
-        <button class="btn btn-primary" @onclick="PreviousPage" disabled="@(currentPage == 1)">
-            Zurück
-        </button>
+        <Button Color="ButtonColor.Secondary" Outline="true" @onclick="PreviousPage" Disabled="@(currentPage == 1)">
+            <span class="bi bi-caret-left-fill"></span>
+        </Button>
 
-        <span>Seite @currentPage von @totalPages</span>
+        <select class="form-control" style="width:50px;" @onchange="GoToPage">
+            @for(var i = 1; i <= totalPages; i++)
+            {
+                if(i == currentPage){
+                    <option value="@i" selected>@i</option>
+                } else
+                {
+                    <option value="@i">@i</option>
+                }
+            }
+        </select>
+        <span> von @totalPages</span>
 
-        <button class="btn btn-primary" @onclick="NextPage" disabled="@(currentPage == totalPages)">
-            Weiter
-        </button>
+        <Button Color="ButtonColor.Secondary" Outline="true" @onclick="NextPage" Disabled="@(currentPage == totalPages)">
+            <span class="bi bi-caret-right-fill"></span>
+        </Button>
     </div>
     <div class="col-sm-8" style="text-align:end;">
         <p>Gesamt: @totalCount</p>
@@ -211,7 +232,7 @@
 
 <Modal @ref="confirmation" Title="Bestätigen" UseStaticBackdrop="true" OnHidePrevented="OnHideModalClick" Size="ModalSize.Large">
     <BodyTemplate>
-       <p><b>Sind Sie sicher, dass @modalFile@modalMessage gelöscht werden soll?</b></p>
+        <p><b>Sind Sie sicher, dass @modalFile@modalMessage gelöscht werden soll?</b></p>
     </BodyTemplate>
     <FooterTemplate>
         <Button Color="ButtonColor.Danger" Outline="true" @onclick="(() => ConfirmAction())">Bestätigen</Button>
@@ -284,12 +305,12 @@
         modalFile = currentPath;
         await confirmation.ShowAsync();
     }
-    
+
     private async Task ConfirmAction()
     {
         if(fileToDeletePath is not null)
         {
-            await DeleteFile(fileToDeletePath, fileToDeleteName);
+            DeleteFile(fileToDeletePath, fileToDeleteName ?? string.Empty);
             await confirmation.HideAsync();
         }
     }
@@ -379,7 +400,7 @@
         return imageExtensions.Any(ext => fileName.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
     }
 
-    private async Task OnUploadFinished()
+    private void OnUploadFinished()
     {
         GoToFolder(currentFolderPath, "goto", currentDataSource);
     }
@@ -434,7 +455,7 @@
 
             if (isTextFile)
             {
-                textFileContent = await FileService.GetTextFileContent(currentDataSource, currentPath, requestedFile);
+                textFileContent = await FileService.GetTextFileContent(currentDataSource, currentPath ?? String.Empty, requestedFile);
             }
             else
             {
@@ -456,12 +477,12 @@
     }
 
 
-    private async Task CreateFolder()
+    private void CreateFolder()
     {
         if (!string.IsNullOrWhiteSpace(newFolderName))
         {
             string path = Path.Combine(currentDataSource, currentPath);
-            await FileService.CreateFolder(path, newFolderName);
+            FileService.CreateFolder(path, newFolderName);
             GoToFolder(currentFolderPath, "goto", currentDataSource);
             newFolderName = "";
         }
@@ -481,12 +502,12 @@
         }
     }
 
-    private async Task DeleteFile(string currentPath, string requestedFile)
+    private void DeleteFile(string currentPath, string requestedFile)
     {          
-        await FileService.DeleteFile(currentDataSource, currentPath, requestedFile);
+        FileService.DeleteFile(currentDataSource, currentPath, requestedFile);
         GoToFolder(currentFolderPath, "goto", currentDataSource);
         ShowMessage(ToastType.Dark, "Löschen erfolgreich!");
-        
+
     }
 
 
@@ -602,6 +623,17 @@
         }
         UpdatePagedFilesList();
     }
+
+    private void GoToPage(ChangeEventArgs e)
+    {
+        if(int.TryParse(e.Value?.ToString(), out int page))
+        {
+            currentPage = page;
+            UpdatePagedFilesList();
+            StateHasChanged();
+        }
+    }
+
 
     private void NextPage()
     {

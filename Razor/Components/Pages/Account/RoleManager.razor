@@ -4,7 +4,7 @@
 @using BlazorBootstrap;
 @rendermode InteractiveServer
 
-<select class="form-select" @onchange="async (e) => await OnChangedRole(e.Value?.ToString())">
+<select class="form-select" @onchange="async (e) => await OnChangedRole(e.Value?.ToString() ?? String.Empty)">
     <option value="">Auswahl</option>
     @foreach (var role in roles)
     {
@@ -44,7 +44,7 @@
 
         <label for="maxFilesize">Max. Upload (MB)</label>
         <input id="maxFilesize" class="form-control" type="number" value="@maxFileSize"
-               @onchange="(e) => { maxFileSize = Convert.ToInt32(e.Value); ChangeFilesizeLimit(); }" />
+               @onchange="async (e) => { maxFileSize = Convert.ToInt32(e.Value);  await ChangeFilesizeLimit();}" />
     </div>
 }
 

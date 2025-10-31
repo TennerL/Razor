@@ -11,12 +11,12 @@
     <div class="row">
         <div>
             <label for="username">Username:</label>
-            <InputText class="form-control" id="username" @bind-Value="Model.UserName" />
+            <InputText class="form-control" id="username" @bind-Value="Model!.UserName" />
         </div>
 
         <div>
             <label for="password">Password:</label>
-            <InputText type="password" class="form-control" id="password" @bind-Value="Model.Password" />
+            <InputText type="password" class="form-control" id="password" @bind-Value="Model!.Password" />
         </div>
     </div>
 
@@ -37,7 +37,7 @@ public class LoginModel
 
     private async Task HandleValidSubmit()
     {
-        if (string.IsNullOrEmpty(Model.UserName) || string.IsNullOrEmpty(Model.Password))
+        if (string.IsNullOrEmpty(Model?.UserName) || string.IsNullOrEmpty(Model.Password))
         {
             return;
         }

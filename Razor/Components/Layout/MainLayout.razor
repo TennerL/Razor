@@ -5,7 +5,13 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager Navigation
 
-
+<style>
+    @@media (min-width: 641px) {
+        .sidebar {
+            width:60px !important;
+        }
+    }
+</style>
 
 <div class="page">
     <div class="sidebar">
@@ -13,8 +19,8 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
-            @if(user.Identity.IsAuthenticated){
+        <div class="top-row px-4 d-none d-md-flex">
+            @if(user?.Identity?.IsAuthenticated ?? false){
             <a href="/Account/logout" class="btn btn-outline-primary">Abmelden</a>
             }
         </div>
@@ -34,7 +40,7 @@
 
 
 @code {
-    private System.Security.Claims.ClaimsPrincipal user;
+    private System.Security.Claims.ClaimsPrincipal? user;
 
     protected override async Task OnInitializedAsync()
     {

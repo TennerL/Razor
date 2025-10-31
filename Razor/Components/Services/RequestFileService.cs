@@ -34,9 +34,9 @@ namespace Razor.Components.Services
             _cleanupService.ScheduleFileDeletion(FullPathDestination, TimeSpan.FromMinutes(1));
 
         }
-   
 
-        public async Task<Stream> GetStreamAsync(string requestedFile, string _FilePath)
+
+        public Stream GetStream(string requestedFile, string _FilePath)
         {
             int lastIndex = requestedFile.LastIndexOf("|");
             if (lastIndex != -1)

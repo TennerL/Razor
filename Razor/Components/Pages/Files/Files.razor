@@ -54,11 +54,13 @@
         if (!string.IsNullOrEmpty(userId))
         {
             var identityUser = await UserManager.FindByIdAsync(userId);
+
+
             if (identityUser != null)
             {
                 isAdmin = await UserManager.IsInRoleAsync(identityUser, "Admin");
             }
-        }
+        
 
         bool hasPermission = await FileAccessService.HasAccess(RequestedFile, userId, "All");
 
@@ -83,6 +85,7 @@
 
             await RequestFileService.GetFile(RequestedFile, DataSource.Replace("|",@"\"));
             Navigation.NavigateTo("/req/" + reqFile);
+        }
         }
     }
 

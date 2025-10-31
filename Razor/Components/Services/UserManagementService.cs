@@ -46,6 +46,9 @@ namespace Razor.Components.Services
         {
             var IdentityUser = await _userManager.FindByIdAsync(userId);
 
+            if (IdentityUser == null)
+                return new List<string>();
+
             var roleNames = await _userManager.GetRolesAsync(IdentityUser);
             var roleIds = new List<string>();
 
@@ -87,7 +90,11 @@ namespace Razor.Components.Services
 
         public async Task<bool> UpdateUserRoleAsync(UpdateRoleModel model)
         {
+            if (string.IsNullOrWhiteSpace(model.UserId) || string.IsNullOrWhiteSpace(model.NewRole))
+                return false;
+
             var user = await _userManager.FindByIdAsync(model.UserId);
+            
             if (user == null)
             {
                 return false;
@@ -126,7 +133,7 @@ namespace Razor.Components.Services
 
     public class UpdateRoleModel
     {
-        public string UserId { get; set; }
-        public string NewRole { get; set; }
+        public string? UserId { get; set; }
+        public string? NewRole { get; set; }
     }
 }
