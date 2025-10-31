@@ -102,6 +102,26 @@ public class FileService
                 await File.WriteAllTextAsync(fullPath, content);
         }
 
+        public async Task DeleteFile(string dataSource, string path, string filename)
+        {
+            var fullPath = Path.Combine(dataSource, path, filename);
+
+            try { 
+                if (File.Exists(fullPath))
+                {
+                    File.Delete(fullPath);                
+                } else if(Directory.Exists(fullPath))
+                {
+                    Directory.Delete(fullPath, recursive: true);
+                }
+            } catch (Exception ex)
+            {
+                Console.WriteLine($"Fehler beim Löschen {fullPath}: {ex.Message}");
+                throw;
+            }
+
+        }
+
 
     }
 

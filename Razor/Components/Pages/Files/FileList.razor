@@ -7,8 +7,11 @@
 @inject UserManagementService UserManagementService
 @inject DataSourceService DataSourceService
 @inject NavigationManager NavigationManager
+@inject ToastService ToastService
 @rendermode InteractiveServer
 @attribute [Authorize]
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
 
 <style>
     th, td {
@@ -38,9 +41,9 @@
 
     <input class="form-control" style="width: 200px;" @bind="newFileName" placeholder="Neue Textdatei.txt" />
     <button class="btn btn-primary" @onclick="CreateTextFile">.txt Datei erstellen</button>
-        <div class="ms-auto">
-            <button class="btn btn-primary" @onclick="OnShowModalUploadClick">Upload</button>
-        </div>
+    <div class="ms-auto">
+        <button class="btn btn-primary" @onclick="OnShowModalUploadClick">Upload</button>
+    </div>
 
 </div>
 
@@ -55,6 +58,7 @@
             <th>Dateiname</th>
             <th>Dateigröße</th>
             <th>Datum</th>
+            <th>Aktion</th>
         </tr>
     </thead>
     <tbody>
@@ -109,6 +113,11 @@
                     </td>
                     <td>@(item.IsFolder ? "" : FormatFileSize(item.FileInfo?.Size) ?? "")</td>
                     <td>@(item.IsFolder ? "" : item.FileInfo?.Date.ToString("dd.MM.yyyy HH:mm") ?? "")</td>
+                    @* <td><button Class="btn btn-link" @onclick="@(() => DeleteFile(currentPath, item.Name))"> *@
+                    <td><button Class="btn btn-link" @onclick="@(async () => await ShowConfirmationModal(currentPath, item.Name))">
+                            <span class="bi bi-trash" aria-hidden="true"></span>
+                        </button>
+                    </td>
                 </tr>
                 index++;
             }
@@ -145,10 +154,7 @@
 
 <Modal @ref="media" Title="Medienanzeige" UseStaticBackdrop="true" OnHidePrevented="OnHideModalClick" Size="ModalSize.Large" @onkeydown="@Enter">
     <BodyTemplate>
-@*         <div class="form-check form-switch mb-2" style="display:flex;">
-            <input class="form-check-input" type="checkbox" role="switch" id="autoplaySwitch" style="margin: auto; margin-right: 0;" @bind ="autoplayEnabled" />
-        </div> *@
-       @if (isTextFile && !string.IsNullOrEmpty(textFileContent))
+        @if (isTextFile && !string.IsNullOrEmpty(textFileContent))
         {
             <textarea class="form-control" style="height: 70vh; width: 100%;" @bind="textFileContent"></textarea>
             <button class="btn btn-success mt-2" @onclick="SaveTextFile">Speichern</button>
@@ -181,7 +187,7 @@
             {
                 <div style="position: relative; height: 75vh; overflow: hidden;">
                     <iframe src="@mediaFileUrl"
-                            style="position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+                    style="position: absolute; top: 0; left: 0; bottom: 0; right: 0;
                                    width: 100%; height: 100%; border: none;">
                     </iframe>
                 </div>
@@ -198,14 +204,27 @@
 <Modal @ref="upload" Title="Upload" UseStaticBackdrop="true" OnHidePrevented="OnHideModalUploadClick" Size="ModalSize.Large">
     <BodyTemplate>
         <Upload dataSource="@currentDataSource"
-                CurrentPath="@currentFolderPath"
-                OnUploadComplete="@OnUploadFinished" />
+        CurrentPath="@currentFolderPath"
+        OnUploadComplete="@OnUploadFinished" />
     </BodyTemplate>
+</Modal>
+
+<Modal @ref="confirmation" Title="Bestätigen" UseStaticBackdrop="true" OnHidePrevented="OnHideModalClick" Size="ModalSize.Large">
+    <BodyTemplate>
+       <p><b>Sind Sie sicher, dass @modalFile@modalMessage gelöscht werden soll?</b></p>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Danger" Outline="true" @onclick="(() => ConfirmAction())">Bestätigen</Button>
+    </FooterTemplate>
 </Modal>
 
 @code {
     private Modal media = default!;
     private Modal upload = default!;
+    private Modal confirmation = default!;
+    private String modalMessage = "";
+    private String modalFile = "";
+
     private string mediaFileUrl = "";
     private int currentMediaIndex = 0;
     private bool autoplayEnabled = false;
@@ -244,12 +263,46 @@
         await LoadRoles();
     }
 
+    private void ShowMessage(ToastType toastType, string message)
+    {
+        ToastService.Notify(new ToastMessage
+            {
+                Type = toastType,
+                Title = "Hinweis: ",
+                Message = $"{message} {DateTime.Now}"
+            });
+    }
+
+    private string? fileToDeleteName;
+    private string? fileToDeletePath;
+
+    private async Task ShowConfirmationModal(string currentPath, string name)
+    {
+        fileToDeletePath = currentPath;
+        fileToDeleteName = name;
+        modalMessage = name;
+        modalFile = currentPath;
+        await confirmation.ShowAsync();
+    }
+    
+    private async Task ConfirmAction()
+    {
+        if(fileToDeletePath is not null)
+        {
+            await DeleteFile(fileToDeletePath, fileToDeleteName);
+            await confirmation.HideAsync();
+        }
+    }
+
     private async Task HandleMediaEnded()
     {
-        if (autoplayEnabled && currentMediaIndex < pagedFilesList.Count - 1)
+        if (autoplayEnabled && currentMediaIndex < pagedFilesList.Count - 1 )
         {
             currentMediaIndex++;
-            await GetFileStream(currentPath, pagedFilesList[currentMediaIndex]);
+            if (!pagedFilesList[currentMediaIndex].EndsWith(".txt") && !pagedFilesList[currentMediaIndex].EndsWith(".pdf"))
+            {
+                await GetFileStream(currentPath, pagedFilesList[currentMediaIndex]);
+            }
         }
     }
 
@@ -426,6 +479,14 @@
             GoToFolder(currentFolderPath, "goto", currentDataSource);
             newFileName = "";
         }
+    }
+
+    private async Task DeleteFile(string currentPath, string requestedFile)
+    {          
+        await FileService.DeleteFile(currentDataSource, currentPath, requestedFile);
+        GoToFolder(currentFolderPath, "goto", currentDataSource);
+        ShowMessage(ToastType.Dark, "Löschen erfolgreich!");
+        
     }
 
 

@@ -17,7 +17,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
- //.AddCircuitOptions(options => options.DetailedErrors = true);
+    //.AddCircuitOptions(options => options.DetailedErrors = true);
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<FileAccessService>();
 builder.Services.AddScoped<RequestFileService>();
