@@ -1,6 +1,6 @@
 
 
-![alt text](/screenshot.JPG)
+![alt text](/screenshot.PNG)
 
 
 
