@@ -99,7 +99,7 @@
                                 <button class="btn btn-link p-0 m-0 text-start" 
                                 style="font-size:small; text-decoration:none; color:white;" 
                                 @onclick="@(() => GoToFolder(item.Name, "", currentDataSource))">
-                                    [Dir] @item.Name
+                                    <span class="bi bi-folder-fill"></span> @item.Name
                                 </button>
                             }
                             else
