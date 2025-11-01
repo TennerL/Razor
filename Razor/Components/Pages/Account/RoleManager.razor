@@ -19,8 +19,8 @@
             <label for="mediaControl">Medienfeatures:</label>
             <div id="mediaControl" class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch"
-                       checked="@IsMediaControlEnabled" id="switchMediaControl"
-                       @onchange="OnMediaControlChanged" />
+                checked="@IsMediaControlEnabled" id="switchMediaControl"
+                @onchange="OnMediaControlChanged" />
             </div>
         </div>
 
@@ -28,8 +28,8 @@
             <label for="thumbControl">Thumbnails:</label>
             <div id="thumbControl" class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch"
-                       checked="@IsThumbnailEnabled" id="switchThumbnailControl"
-                       @onchange="OnThumbnailControlChanged" />
+                checked="@IsThumbnailEnabled" id="switchThumbnailControl"
+                @onchange="OnThumbnailControlChanged" />
             </div>
         </div>
 
@@ -37,14 +37,22 @@
             <label for="autoplayControl">Autoplay:</label>
             <div id="autoplayControl" class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" checked="@IsAutoplayEnabled" @onchange="OnAutoplayControlChanged"
-                       id="switchAutoplayControl" />
+                id="switchAutoplayControl" />
+            </div>
+        </div>
+
+        <div class="col-6">
+            <label for="directFsControl">Direct File Streaming: </label>
+            <div id="directFsControl" class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" checked="@IsDirectFsEnabled" @onchange="OnDirectFsControlChanged"
+                id="switchDirectFsControl" />
             </div>
         </div>
 
 
         <label for="maxFilesize">Max. Upload (MB)</label>
         <input id="maxFilesize" class="form-control" type="number" value="@maxFileSize"
-               @onchange="async (e) => { maxFileSize = Convert.ToInt32(e.Value);  await ChangeFilesizeLimit();}" />
+        @onchange="async (e) => { maxFileSize = Convert.ToInt32(e.Value);  await ChangeFilesizeLimit();}" />
     </div>
 }
 
@@ -56,12 +64,14 @@
     RoleAttributes? maxSizeAttribute;
     RoleAttributes? thumbnailAttribute;
     RoleAttributes? autoplayAttribute;
+    RoleAttributes? directFileStream;
     List<UserDto> users = new();
     int maxFileSize = 0;
     string selectedId = "";
     private bool IsMediaControlEnabled = false;
     private bool IsThumbnailEnabled = false;
     private bool IsAutoplayEnabled = false;
+    private bool IsDirectFsEnabled = false;
 
     private void ShowMessage(ToastType toastType)
     {
@@ -89,6 +99,11 @@
         IsAutoplayEnabled = e.Value?.ToString()?.ToLower() == "true";
         await AddRoleAttributes(IsAutoplayEnabled, "Autoplay");
     }
+    private async Task OnDirectFsControlChanged(ChangeEventArgs e)
+    {
+        IsDirectFsEnabled = e.Value?.ToString()?.ToLower() == "true";
+        await AddRoleAttributes(IsDirectFsEnabled, "DirectFileStream");
+    }
 
 
     protected override async Task OnInitializedAsync()
@@ -110,10 +125,12 @@
             thumbnailAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "Thumbnails");
             maxSizeAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "MaxFileSize");
             autoplayAttribute = await RoleAttributeService.GetRoleAttribute(selectedId, "Autoplay");
+            directFileStream = await RoleAttributeService.GetRoleAttribute(selectedId, "DirectFileStream");
 
             IsMediaControlEnabled = Convert.ToBoolean(roleAttribute?.Value ?? 0);
             IsThumbnailEnabled = Convert.ToBoolean(thumbnailAttribute?.Value ?? 0);
             IsAutoplayEnabled = Convert.ToBoolean(autoplayAttribute?.Value ?? 0);
+            IsDirectFsEnabled = Convert.ToBoolean(directFileStream?.Value ?? 0);
 
             if (maxSizeAttribute != null)
             {

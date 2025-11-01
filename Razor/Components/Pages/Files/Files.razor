@@ -3,6 +3,8 @@
 @inject NavigationManager Navigation
 @inject FileAccessService FileAccessService
 @inject RequestFileService RequestFileService
+@inject RoleAttributeService RoleAttributeService
+@inject UserManagementService UserManagementService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<IdentityUser> UserManager
 @attribute [Authorize]
@@ -32,9 +34,11 @@
 
 @code {
     private string accessMessage = "";
+    private bool IsDirectFileStreamEnabled = false;
 
     protected override async Task OnParametersSetAsync()
     {
+        await LoadRoles();
         await CheckPermission(); 
     }
 
@@ -60,33 +64,65 @@
             {
                 isAdmin = await UserManager.IsInRoleAsync(identityUser, "Admin");
             }
-        
 
-        bool hasPermission = await FileAccessService.HasAccess(RequestedFile, userId, "All");
 
-        accessMessage = hasPermission ? "Zugriff" : "Kein Zugriff";
+            bool hasPermission = await FileAccessService.HasAccess(RequestedFile, userId, "All");
 
-        var reqFile = "";
-        int lastIndex = RequestedFile.LastIndexOf("|");
-        if (lastIndex != -1)
-        {
-            reqFile = RequestedFile.Substring(lastIndex + 1);
-        } else
-        {
-            reqFile = RequestedFile;
+            accessMessage = hasPermission ? "Zugriff" : "Kein Zugriff";
+
+            var reqFile = "";
+            int lastIndex = RequestedFile.LastIndexOf("|");
+            if (lastIndex != -1)
+            {
+                reqFile = RequestedFile.Substring(lastIndex + 1);
+            } else
+            {
+                reqFile = RequestedFile;
+            }
+
+            if (hasPermission)
+            {
+                await RequestFileService.GetFile(RequestedFile, DataSource.Replace("|", @"\"));
+                Navigation.NavigateTo("/req/" + reqFile);
+            }
+            else if (isAdmin && !IsDirectFileStreamEnabled)
+            {
+
+                await RequestFileService.GetFile(RequestedFile, DataSource.Replace("|", @"\"));
+                Navigation.NavigateTo("/req/" + reqFile);
+            }
+            else if (isAdmin && IsDirectFileStreamEnabled)
+            {
+                var encodedFile = Uri.EscapeDataString(RequestedFile);
+                var encodedPath = Uri.EscapeDataString(DataSource.Replace("|", @"\"));
+                Navigation.NavigateTo(
+                    $"/api/files/download?requestedFile={encodedFile}&filePath={encodedPath}",
+                    forceLoad: true);                
+            }
         }
+    }
 
-        if (hasPermission)
-        {
-            await RequestFileService.GetFile(RequestedFile, DataSource.Replace("|",@"\"));
-            Navigation.NavigateTo("/req/" + reqFile);
-        } else if (isAdmin)
-        {
+    private List<string> roles = new();
+    private string role = "";
 
-            await RequestFileService.GetFile(RequestedFile, DataSource.Replace("|",@"\"));
-            Navigation.NavigateTo("/req/" + reqFile);
+    protected async Task LoadRoles()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User.Identity;
+        var userId = authState.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (userId != null)
+        {
+            roles = await UserManagementService.GetRoleOfUserAsync(userId);
+            role = roles.First();
         }
-        }
+        StateHasChanged();
+        await LoadRoleAttributes();
+    }
+
+    public async Task LoadRoleAttributes()
+    {
+        var DirectStreaming = await RoleAttributeService.GetRoleAttribute(role, "DirectFileStream");
+        IsDirectFileStreamEnabled = Convert.ToBoolean(DirectStreaming?.Value);
     }
 
 

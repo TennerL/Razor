@@ -17,7 +17,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-    //.AddCircuitOptions(options => options.DetailedErrors = true);
+//.AddCircuitOptions(options => options.DetailedErrors = true);
+builder.Services.AddControllers();
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<FileAccessService>();
 builder.Services.AddScoped<RequestFileService>();
@@ -80,6 +81,14 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/req"
 });
 
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "share")),
+    RequestPath = "/share",
+    ServeUnknownFileTypes = true,
+    DefaultContentType = "text/plain" 
+});
+
 
 //builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -87,6 +96,7 @@ builder.Logging.AddConsole();
 
 app.UseAntiforgery();
 
+app.MapControllers();
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
