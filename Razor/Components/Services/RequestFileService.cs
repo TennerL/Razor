@@ -41,7 +41,6 @@ namespace Razor.Components.Services
 
             _cleanupService.ScheduleFileDeletion(FullPathDestination, TimeSpan.FromMinutes(1));
         }
-
         public async Task<string> ShareFile(string requestedFileUrl)
         {
             if (string.IsNullOrWhiteSpace(requestedFileUrl))
@@ -56,7 +55,6 @@ namespace Razor.Components.Services
 
             string hash = GetHashString(requestedFileUrl);
             string pathDestination = Path.Combine(_shareDir, hash);
-
             Directory.CreateDirectory(pathDestination);
 
             string fullPathDestination = Path.Combine(pathDestination, fileName);
@@ -66,18 +64,34 @@ namespace Razor.Components.Services
                 if (File.Exists(fullPathDestination))
                     File.Delete(fullPathDestination);
 
-                await using var sourceStream = new FileStream(requestedFileUrl, FileMode.Open, FileAccess.Read, FileShare.Read);
-                await using var destinationStream = new FileStream(fullPathDestination, FileMode.CreateNew, FileAccess.Write);
-                await sourceStream.CopyToAsync(destinationStream);
+                const int bufferSize = 1024 * 1024; 
+
+                await using var sourceStream = new FileStream(
+                    requestedFileUrl,
+                    FileMode.Open,
+                    FileAccess.Read,
+                    FileShare.Read,
+                    bufferSize,
+                    useAsync: true);
+
+                await using var destinationStream = new FileStream(
+                    fullPathDestination,
+                    FileMode.CreateNew,
+                    FileAccess.Write,
+                    FileShare.None,
+                    bufferSize,
+                    useAsync: true);
+
+                await sourceStream.CopyToAsync(destinationStream, bufferSize);
             }
             catch (Exception ex)
             {
-                throw new IOException($"Failed to share file: {fileName}", ex);
+                throw new IOException($"Failed to share file '{fileName}': {ex.Message}", ex);
             }
 
             string relativeUrl = $"{hash}/{fileName}";
-
             string baseUrl = string.Empty;
+
             if (_httpContextAccessor?.HttpContext?.Request != null)
             {
                 var req = _httpContextAccessor.HttpContext.Request;
@@ -88,6 +102,7 @@ namespace Razor.Components.Services
 
             return finalUrl;
         }
+
 
 
 

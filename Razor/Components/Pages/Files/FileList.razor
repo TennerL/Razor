@@ -225,9 +225,24 @@
     <FooterTemplate>
         @if (!isTextFile)
         {
+            <div class="mt-3" style="display:flex;">
             <Button Color="ButtonColor.Primary" Outline="true" @onclick="() => ShareFile(mediaFileUrl)">
                 <span class="bi bi-share"></span>
             </Button>
+            @if (!string.IsNullOrEmpty(sharedLink))
+            {
+            
+                <div class="input-group">
+                    <input id="shareLinkBox" class="form-control" value="@sharedLink" readonly />
+                    <button class="btn btn-outline-secondary" @onclick="CopyShareLink">Kopieren</button>
+                </div>
+            
+            }
+            </div>
+        }
+        @if (isSharing)
+        {
+            <div class="spinner">Wird geteilt...</div>
         }
     </FooterTemplate>
 </Modal>
@@ -480,14 +495,43 @@
         }
     }
 
+    private bool isSharing;
+    private string? sharedLink;
+
     private async Task ShareFile(string fileUrl)
     {
-        string source = fileUrl.Substring(fileUrl.IndexOf('|'));
-        var shareUrl = await RequestFileService.ShareFile(source);
+        if (isSharing)
+            return;
 
-        await CopyToClipboard(shareUrl);
+        try
+        {
+            isSharing = true;
+            sharedLink = null;
+            ShowMessage(ToastType.Info, "Datei wird geteilt...");
 
-        ShowMessage(ToastType.Success, $"Datei geteilt: {shareUrl}");
+            string source = fileUrl.Substring(fileUrl.IndexOf('|'));
+            var link = await RequestFileService.ShareFile(source);
+
+            sharedLink = link;
+            ShowMessage(ToastType.Success, "Freigabelink erstellt!");
+        }
+        catch (Exception ex)
+        {
+            ShowMessage(ToastType.Warning, $"Fehler beim Teilen: {ex.Message}");
+        }
+        finally
+        {
+            isSharing = false;
+        }
+    }
+
+    private async Task CopyShareLink()
+    {
+        if (string.IsNullOrEmpty(sharedLink))
+            return;
+
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", sharedLink);
+        ShowMessage(ToastType.Success, "Link in Zwischenablage kopiert!");
     }
 
 
@@ -672,11 +716,5 @@
         UpdatePagedFilesList();
         StateHasChanged();
     }
-
-    private async Task CopyToClipboard(string text)
-    {
-        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
-    }
-
 
 }
